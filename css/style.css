@@ -39,9 +39,18 @@
 }
 
 @media (min-width: 1025px) {
-    .add-client-btn:hover {
+    .add-client-btn:hover,
+    .save-btn:hover {
         background-color: var(--melrose);
         color: var(--white)
+    }
+
+    .add-contact-btn:hover .add-contact-btn__text {
+        color: var(--purpule);
+    }
+    
+    .add-contact-btn:hover .add-contact-btn__text::before {
+        background-image: url('../img/add-contact-focus.svg')
     }
 }
 
@@ -201,12 +210,14 @@ html {
     fill: currentColor;
 }
 
-.add-client-btn:focus {
+.add-client-btn:focus,
+.save-btn:focus {
     background-color: var(--melrose);
     color: var(--white)
 }
 
-.add-client-btn:active {
+.add-client-btn:active,
+.save-btn:active {
     background-color: var(--electric-violet);
     color: var(--white)
 }
@@ -322,20 +333,39 @@ html {
 }
 
 .add-contact-btn {
-    display: flex;
-    align-items: center;
     margin: 0 auto;
     padding-top: 8px;
     padding-bottom: 8px;
+}
+
+.add-contact-btn__text {
+    position: relative;
+    padding-left: 19px;
     color: var(--mine-shaft);
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
+    transition: color 0.3s ease-in-out;
 }
 
-.add-contact-btn__svg {
-    margin-right: 5px;
-    fill: var(--purpule);
+.add-contact-btn__text::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    background-image: url('../img/add-contact.svg');
+    transform: translateY(-50%);
+    transition: background-image 0.3s ease-in-out;
+}
+
+.add-contact-btn:focus .add-contact-btn__text {
+    color: var(--purpule);
+}
+
+.add-contact-btn:focus .add-contact-btn__text::before {
+    background-image: url('../img/add-contact-focus.svg')
 }
 
 .save-btn {
@@ -347,6 +377,7 @@ html {
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
+    transition: background-color 0.3s ease-in-out;
 }
 
 .cansel-btn {
