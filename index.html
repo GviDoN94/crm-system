@@ -25,7 +25,7 @@
                     <img class="logo-link__logo" src="img/logo.svg" alt="Логотип SKB">
                 </picture>
             </a>
-            <form class="search" action="#">
+            <form class="search">
                 <input class="search__input" type="text" placeholder="Введите запрос">
             </form>
         </div>
@@ -68,16 +68,19 @@
                 </button>
             </div>
         </section>
-        <div class="modal is-open-modal">
+        <div class="modal">
             <div class="modal__content modal-add">
                 <button class="close-btn btn-reset">
                     <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
                     </svg>                        
                 </button>
-                <form action="#" class="modal-form">
+                <form class="modal-form">
                     <div class="modal-form__inputs-wrap">
-                        <legend class="modal-form__title subtitle">Новый клиент</legend>
+                        <div class="modal-form__title-wrap">
+                            <legend class="modal-form__title subtitle">Новый клиент</legend>
+                            <span class="modal-form__client-id"></span>
+                        </div>
                         <label class="modal-form__lable">
                             <span class="modal-form__lable-text">Фамилия
                                 <span class="modal-form__lable-text-star">*</span>
@@ -104,7 +107,45 @@
                     <button class="btn-reset cansel-btn" type="button">Отмена</button>
                 </form>
             </div>
-            <div class="modal__content modal-delete modal-open">
+            <div class="modal__content modal-change">
+                <button class="close-btn btn-reset">
+                    <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
+                    </svg>
+                </button>
+                <form class="modal-form">
+                    <div class="modal-form__inputs-wrap">
+                        <div class="modal-form__title-wrap">
+                            <legend class="modal-form__title subtitle">Изменить данные</legend>
+                            <span class="modal-form__client-id"></span>
+                        </div>
+                        <label class="modal-form__lable">
+                            <span class="modal-form__lable-text">Фамилия
+                                <span class="modal-form__lable-text-star">*</span>
+                            </span>
+                            <input class="modal-form__input" type="text" name="surname">
+                        </label>
+                        <label class="modal-form__lable">
+                            <span class="modal-form__lable-text">Имя
+                                <span class="modal-form__lable-text-star">*</span>
+                            </span>
+                            <input class="modal-form__input" type="text" name="name">
+                        </label>
+                        <label class="modal-form__lable">
+                            <span class="modal-form__lable-text">Отчество</span>
+                            <input class="modal-form__input" type="text" name="lastName">
+                        </label>
+                    </div>
+                    <div class="modal-form__contacts">
+                        <button class="btn-reset add-contact-btn" type="button">
+                            <span class="add-contact-btn__text">Добавить контакт</span>
+                        </button>
+                    </div>
+                    <button class="btn-reset accept-btn" type="submit">Сохранить</button>
+                    <button class="btn-reset cansel-btn" type="button">Удалить клиента</button>
+                </form>
+            </div>
+            <div class="modal__content modal-delete">
                 <button class="close-btn btn-reset">
                     <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
