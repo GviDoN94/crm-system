@@ -1,9 +1,21 @@
 'use strict';
 
 window.addEventListener('DOMContentLoaded', () => {
-    const modalAdd = document.querySelector('#modal-add'),
-          modalChange = document.querySelector('#modal-change'),
-          modalDelete = document.querySelector('#modal-delete');
+    function renderElement(element, parent) {
+        parent.append(element);
+    }
+    
+    function createElement(name, parent, text = '', classesEl = []) {
+        const element = document.createElement(name);
+        if (classesEl.length) {
+        element.classList.add(...classesEl);
+        }
+        if(text) {
+        element.textContent = text;
+        }
+        renderElement(element, parent);
+        return element;
+    }
 
     function openModal(modal) {
         const modalContent = modal.querySelector('.modal__content');
@@ -18,6 +30,24 @@ window.addEventListener('DOMContentLoaded', () => {
              .classList.remove('modal-open', 'animate-open');
     }
 
+    async function postData(url, data) {
+        const result = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return await result.json();
+    }
+
+    const modalAdd = document.querySelector('#modal-add'),
+          formAdd = modalAdd.querySelector('.modal-form'),
+          inputsFormAdd = formAdd.querySelectorAll('.modal-form__input'),
+          errorsFormAdd = formAdd.querySelector('.modal-form__errors-box'),
+          modalChange = document.querySelector('#modal-change'),
+          modalDelete = document.querySelector('#modal-delete');
+
     document.querySelector('.add-client-btn').addEventListener('click', () => {
         openModal(modalAdd);
     });
@@ -28,6 +58,36 @@ window.addEventListener('DOMContentLoaded', () => {
             event.closest('.close-btn') ||
             event.closest('.cansel-btn')) {
             closeModal(modalAdd);
+            formAdd.reset();
+            errorsFormAdd.innerHTML = '';
+            inputsFormAdd.forEach(input =>
+                input.classList.remove('modal-form__input--error'));
         }
+    });
+
+    formAdd.addEventListener('submit', e => {
+        e.preventDefault();
+
+        const formData = new FormData(formAdd),
+              newClient = Object.fromEntries(formData.entries());
+
+        postData('http://localhost:3500/api/clients', newClient)
+            .then((data) => {
+                if (data.errors) {
+                    data.errors.forEach(error => {
+                        createElement('span', errorsFormAdd, error.message);
+                        inputsFormAdd.forEach(input => {
+                            if (input.name === error.field) {
+                                input.classList.add('modal-form__input--error');
+                            }
+                        });
+                    });
+                } else {
+                    formAdd.reset();
+                    closeModal(modalAdd);
+                }
+            })
+            .catch(() =>
+                createElement('span', errorsFormAdd, 'Что-то пошло не так'));
     });
 });
