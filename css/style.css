@@ -39,17 +39,17 @@
 }
 
 @media (min-width: 1025px) {
-    .add-client-btn:hover,
-    .save-btn:hover {
+    .add-client-btn:hover:not(.focus-visible),
+    .accept-btn:hover:not(.focus-visible) {
         background-color: var(--melrose);
         color: var(--white)
     }
 
-    .add-contact-btn:hover .add-contact-btn__text {
+    .add-contact-btn:hover:not(.focus-visible) .add-contact-btn__text {
         color: var(--purpule);
     }
     
-    .add-contact-btn:hover .add-contact-btn__text::before {
+    .add-contact-btn:hover:not(.focus-visible) .add-contact-btn__text::before {
         background-image: url('../img/add-contact-focus.svg')
     }
 }
@@ -94,6 +94,14 @@ html {
     outline: none;
     background-color: transparent;
     cursor: pointer;
+}
+
+.subtitle {
+    margin: 0;
+    color: var(--mine-shaft);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
 }
 
 .header {
@@ -210,19 +218,19 @@ html {
     fill: currentColor;
 }
 
-.add-client-btn:focus,
-.save-btn:focus {
+.add-client-btn.focus-visible,
+.accept-btn.focus-visible {
     background-color: var(--melrose);
     color: var(--white)
 }
 
-.add-client-btn:active,
-.save-btn:active {
+.add-client-btn:active:not(.focus-visible),
+.accept-btn:active:not(.focus-visible) {
     background-color: var(--electric-violet);
     color: var(--white)
 }
 
-.modal-add {
+.modal {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -234,20 +242,24 @@ html {
     cursor: pointer;
     overflow-x: hidden;
     overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
-.modal-add::before {
+.modal::before {
     content: "";
     display: inline-block;
     vertical-align: middle;
     height: 100%;
 }
 
-.modal-add__container {
+.modal__content {
     position: relative;
     vertical-align: middle;
-    display: inline-flex;
+    display: none;
     flex-direction: column;
+    align-items: center;
     margin: 50px auto;
     width: 450px;
     padding: 24px 0;
@@ -277,12 +289,7 @@ html {
 
 .modal-form__title {
     align-self: flex-start;
-    margin: 0;
     margin-bottom: 10px;
-    color: var(--mine-shaft);
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 25px;
 }
 
 .modal-form__lable {
@@ -316,7 +323,7 @@ html {
     transform: translate(0);
 }
 
-.modal-add__input {
+.modal-form__input {
     padding: 4px 0;
     border: none;
     border-bottom: 1px solid var(--gray-suit-opacity);
@@ -327,15 +334,15 @@ html {
     line-height: 19px;
 }
 
-.modal-add__contacts {
+.modal-form__contacts {
     margin-bottom: 25px;
+    padding: 0 30px;
     background-color: rgba(200, 197, 209, 0.3);
 }
 
 .add-contact-btn {
     margin: 0 auto;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    padding: 8px 0 8px;
 }
 
 .add-contact-btn__text {
@@ -360,15 +367,15 @@ html {
     transition: background-image 0.3s ease-in-out;
 }
 
-.add-contact-btn:focus .add-contact-btn__text {
+.add-contact-btn.focus-visible .add-contact-btn__text {
     color: var(--purpule);
 }
 
-.add-contact-btn:focus .add-contact-btn__text::before {
+.add-contact-btn.focus-visible .add-contact-btn__text::before {
     background-image: url('../img/add-contact-focus.svg')
 }
 
-.save-btn {
+.accept-btn {
     align-self: center;
     margin-bottom: 5px;
     padding: 12.5px 35px;
@@ -386,4 +393,26 @@ html {
     font-size: 12px;
     line-height: 16px;
     text-decoration: underline;
+}
+
+.modal.is-open-modal {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-open {
+    display: inline-flex;
+}
+
+.modal-delete__title {
+    margin-bottom: 11px;
+}
+
+.modal-delete__question {
+    margin: 0;
+    margin-bottom: 25px;
+    max-width: 275px;
+    color: var(--mine-shaft);
+    font-size: 14px;
+    line-height: 19px;
 }
