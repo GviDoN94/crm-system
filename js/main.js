@@ -6,13 +6,16 @@ window.addEventListener('DOMContentLoaded', () => {
           modalDelete = document.querySelector('#modal-delete');
 
     function openModal(modal) {
+        const modalContent = modal.querySelector('.modal__content');
         modal.classList.add('is-open-modal');
-        modal.querySelector('.modal__content').classList.add('modal-open');
+        modalContent.classList.add('modal-open');
+        setTimeout(() => modalContent.classList.add('animate-open'), 300);
     }
 
     function closeModal(modal) {
         modal.classList.remove('is-open-modal');
-        modal.querySelector('.modal__content').classList.remove('modal-open');
+        modal.querySelector('.modal__content')
+             .classList.remove('modal-open', 'animate-open');
     }
 
     document.querySelector('.add-client-btn').addEventListener('click', () => {
