@@ -6,8 +6,6 @@
     --purpule: #9873FF;
     --melrose: #B89EFF;
     --electric-violet: #8052FF;
-    --mine-shaft-opacity: rgba(51, 51, 51, 0.6);
-    --gray-suit-opacity: rgba(200, 197, 209, 0.5);
     --red: #F06A4D;
 
 }
@@ -239,7 +237,7 @@ html {
     right: 0;
     z-index: 1000;
     text-align: center;
-    background-color: var(--mine-shaft-opacity);
+    background-color: rgba(51, 51, 51, 0.6);
     cursor: pointer;
     overflow-x: hidden;
     overflow-y: auto;
@@ -294,7 +292,7 @@ html {
 .modal-form__title-wrap {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 32px;
 }
 
 .modal-form__title {
@@ -307,46 +305,61 @@ html {
     line-height: 16px;
 }
 
-.modal-form__lable {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin-bottom: 10px;
+.modal-form__input-wrap {
+    position: relative;
+    width: 100%;
+    margin-bottom: 32px;
 }
 
-.modal-form__lable:last-child {
+.modal-form__input-wrap:last-child {
     margin-bottom: 25px;
 }
 
-.modal-form__lable-text {
-    display: flex;
-    color: var(--silver-chalice);
-    font-size: 14px;
-    line-height: 19px;
-    transform: translateY(25px);
-    transition-property: transform, font-size;
-    transition-duration: 0.3s;
-    transition-timing-function: ease-in-out;
-}
-
-.modal-form__lable-text-star {
-    color: var(--purpule);
-}
-
-.modal-form__lable-text--focus {
-    font-size: 10px;
-    transform: translate(0);
-}
-
 .modal-form__input {
-    padding: 4px 0;
+    padding: 0;
+    padding-bottom: 4px;
     border: none;
-    border-bottom: 1px solid var(--gray-suit-opacity);
+    border-bottom: 1px solid rgba(200, 197, 209, 0.5);
+    border-radius: 0;
+    width: 100%;
     outline: none;
+    appearance: none;
     color: var(--mine-shaft);
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
+}
+
+.modal-form__placeholder {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    color: var(--silver-chalice);
+    font-size: 14px;
+    line-height: 19px;
+    transition-property: top, font-size;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-in-out;
+    pointer-events: none;
+}
+
+.modal-form__placeholder-star {
+    color: var(--purpule);
+}
+
+.modal-form__placeholder--small {
+    top: -17px;
+    font-size: 10px
+}
+
+.modal-form__input.focus-visible + .modal-form__placeholder {
+    top: -17px;
+    font-size: 10px;
+}
+
+.modal-form__lable-text-star {
+    color: var(--purpule);
 }
 
 .modal-form__input--error {

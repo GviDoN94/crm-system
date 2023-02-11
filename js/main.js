@@ -65,6 +65,18 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    document.querySelectorAll('.modal-form__input').forEach(input => {
+        input.addEventListener('change', () => {
+            if (input.value) {
+                input.nextElementSibling
+                     .classList.add('modal-form__placeholder--small');
+            } else {
+                input.nextElementSibling
+                     .classList.remove('modal-form__placeholder--small');
+            }
+        });
+    });
+
     formAdd.addEventListener('submit', e => {
         e.preventDefault();
 
