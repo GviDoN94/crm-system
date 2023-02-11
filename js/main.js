@@ -45,6 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
           formAdd = modalAdd.querySelector('.modal-form'),
           inputsFormAdd = formAdd.querySelectorAll('.modal-form__input'),
           errorsFormAdd = formAdd.querySelector('.modal-form__errors-box'),
+          loadIconBtn = formAdd.querySelector('.accept-btn__text'),
           modalChange = document.querySelector('#modal-change'),
           modalDelete = document.querySelector('#modal-delete');
 
@@ -61,7 +62,8 @@ window.addEventListener('DOMContentLoaded', () => {
             formAdd.reset();
             errorsFormAdd.innerHTML = '';
             inputsFormAdd.forEach(input =>
-                input.classList.remove('modal-form__input--error'));
+                input.classList.remove('modal-form__input--error')
+            );
         }
     });
 
@@ -79,6 +81,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     formAdd.addEventListener('submit', e => {
         e.preventDefault();
+        errorsFormAdd.innerHTML = '';
+        loadIconBtn.classList.add('accept-btn__text--load');
 
         const formData = new FormData(formAdd),
               newClient = Object.fromEntries(formData.entries());
@@ -100,6 +104,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(() =>
-                createElement('span', errorsFormAdd, 'Что-то пошло не так'));
+                createElement('span', errorsFormAdd, 'Что-то пошло не так')
+            )
+            .finally(() =>
+                loadIconBtn.classList.remove('accept-btn__text--load')
+            );
     });
 });
+
