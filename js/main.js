@@ -113,11 +113,11 @@ window.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-    const select = document.querySelector('.contact__select');
-    new Choices(select, {
-        itemSelectText: '',
-        searchEnabled: false,
-        position: 'bottom',
-        shouldSort: false,
-    });
+    // const select = document.querySelector('.contact__select');
+    // new Choices(select, {
+    //     itemSelectText: '',
+    //     searchEnabled: false,
+    //     position: 'bottom',
+    //     shouldSort: false,
+    // });
 });
