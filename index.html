@@ -13,8 +13,10 @@
     <link rel="preload" href="fonts/OpenSansBold.woff2" as="font" type="font/woff2">
     <link rel="preload" href="fonts/OpenSansBold.woff" as="font" type="font/woff">
     <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="libs/choices-js/choices.min.css">
     <link rel="stylesheet" href="css/style.css">
     <script defer src="libs/focus-visible/focus-visible.js"></script>
+    <script defer src="libs/choices-js/choices.min.js"></script>
     <script defer src="js/main.js"></script>
 </head>
 <body class="body">
@@ -68,8 +70,8 @@
                 </button>
             </div>
         </section>
-        <div class="modal" id="modal-add">
-            <div class="modal__content">
+        <div class="modal is-open-modal" id="modal-add">
+            <div class="modal__content modal-open animate-open">
                 <button class="close-btn btn-reset">
                     <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
@@ -99,14 +101,27 @@
                         </div>
                     </div>
                     <div class="modal-form__contacts">
+                        <div class="contact">
+                            <select class="contact__select" name="" id="">
+                                <option value="">Телефон</option>
+                                <option value="">Доп. телефон</option>
+                                <option value="">Email</option>
+                                <option value="">Vk</option>
+                                <option value="">Facebook</option>
+                            </select>
+                            <input class="contact__input" type="text" placeholder="Введите данные контакта">
+                            <button class="btn-reset contact__delete" type="button">
+                                <svg class="contact__svg-delete" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 0C2.682 0 0 2.682 0 6C0 9.318 2.682 12 6 12C9.318 12 12 9.318 12 6C12 2.682 9.318 0 6 0ZM6 10.8C3.354 10.8 1.2 8.646 1.2 6C1.2 3.354 3.354 1.2 6 1.2C8.646 1.2 10.8 3.354 10.8 6C10.8 8.646 8.646 10.8 6 10.8ZM8.154 3L6 5.154L3.846 3L3 3.846L5.154 6L3 8.154L3.846 9L6 6.846L8.154 9L9 8.154L6.846 6L9 3.846L8.154 3Z"/>
+                                    </svg>                                    
+                            </button>
+                        </div>
                         <button class="btn-reset add-contact-btn" type="button">
                             <span class="add-contact-btn__text">Добавить контакт</span>
                         </button>
                     </div>
                     <div class="modal-form__errors-box"></div>
-                    <button class="btn-reset accept-btn" type="submit">
-                        <span class="accept-btn__text">Сохранить</span>
-                    </button>
+                    <button class="btn-reset accept-btn" type="submit">Сохранить</button>
                     <button class="btn-reset cansel-btn" type="button">Отмена</button>
                 </form>
             </div>

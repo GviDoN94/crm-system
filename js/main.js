@@ -45,7 +45,7 @@ window.addEventListener('DOMContentLoaded', () => {
           formAdd = modalAdd.querySelector('.modal-form'),
           inputsFormAdd = formAdd.querySelectorAll('.modal-form__input'),
           errorsFormAdd = formAdd.querySelector('.modal-form__errors-box'),
-          loadIconBtn = formAdd.querySelector('.accept-btn__text'),
+          acceptAddBtn = formAdd.querySelector('.accept-btn'),
           modalChange = document.querySelector('#modal-change'),
           modalDelete = document.querySelector('#modal-delete');
 
@@ -82,7 +82,8 @@ window.addEventListener('DOMContentLoaded', () => {
     formAdd.addEventListener('submit', e => {
         e.preventDefault();
         errorsFormAdd.innerHTML = '';
-        loadIconBtn.classList.add('accept-btn__text--load');
+        acceptAddBtn.classList.add('accept-btn--load');
+        acceptAddBtn.disabled = true;
 
         const formData = new FormData(formAdd),
               newClient = Object.fromEntries(formData.entries());
@@ -106,9 +107,17 @@ window.addEventListener('DOMContentLoaded', () => {
             .catch(() =>
                 createElement('span', errorsFormAdd, 'Что-то пошло не так')
             )
-            .finally(() =>
-                loadIconBtn.classList.remove('accept-btn__text--load')
-            );
+            .finally(() => {
+                acceptAddBtn.classList.remove('accept-btn--load');
+                acceptAddBtn.disabled = false;
+            });
+    });
+
+    const select = document.querySelector('.contact__select');
+    new Choices(select, {
+        itemSelectText: '',
+        searchEnabled: false,
+        position: 'bottom',
+        shouldSort: false,
     });
 });
-

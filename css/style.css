@@ -7,7 +7,7 @@
     --melrose: #B89EFF;
     --electric-violet: #8052FF;
     --red: #F06A4D;
-
+    --mischka: #E7E5EB;
 }
 
 @font-face {
@@ -39,7 +39,7 @@
 
 @media (min-width: 1025px) {
     .add-client-btn:hover:not(.focus-visible),
-    .accept-btn:hover:not(.focus-visible) {
+    .accept-btn:hover:not(.focus-visible):not(:disabled) {
         background-color: var(--melrose);
         color: var(--white)
     }
@@ -50,6 +50,14 @@
     
     .add-contact-btn:hover:not(.focus-visible) .add-contact-btn__text::before {
         background-image: url('../img/add-contact-focus.svg')
+    }
+
+    .contact__delete:hover:not(.focus-visible) {
+        border-color: var(--red);
+    }
+
+    .contact__delete:hover:not(.focus-visible) .contact__svg-delete {
+        fill: var(--red);
     }
 }
 
@@ -234,7 +242,7 @@ html {
 }
 
 .add-client-btn:active:not(.focus-visible),
-.accept-btn:active:not(.focus-visible) {
+.accept-btn:active:not(.focus-visible):not(:disabled) {
     background-color: var(--electric-violet);
     color: var(--white)
 }
@@ -377,14 +385,113 @@ html {
 }
 
 .modal-form__contacts {
-    margin-bottom: 10px;
-    padding: 0 30px;
+    padding: 25px 30px;
     background-color: rgba(200, 197, 209, 0.3);
+}
+
+.contact {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.contact:last-of-type {
+    margin-bottom: 25px;
+}
+
+.choices {
+    margin: 0;
+    max-width: 123px;
+    width: 100%;
+}
+
+.choices[data-type*=select-one]::after {
+    margin: 0;
+    border: none;
+    width: 10px;
+    height: 6px;
+    background-image: url('../img/select-arrow.svg');
+    transform: translateY(-50%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.choices[data-type*=select-one].is-open::after {
+    margin: 0;
+    border: none;
+    transform: rotate(-180deg) translateY(50%);
+}
+
+.choices__inner {
+    border-radius: 0;
+    border: 1px solid var(--gray-suit);
+    min-height: auto;
+    color: var(--mine-shaft);
+    font-size: 12px;
+    line-height: 16px;
+    background-color: var(--mischka);
+}
+
+.is-open .choices__inner,
+.is-focused .choices__inner {
+    border-radius: 0;
+    border-color: var(--gray-suit);
+}
+
+.choices[data-type*=select-one] .choices__inner {
+    padding: 10px;
+    padding-left: 12px;
+}
+
+.choices__list--single {
+    text-align: left;
+    padding: 0;
+    padding-right: 16px;
+}
+
+.choices__placeholder {
+    opacity: 1;
+}
+
+.contact__input {
+    padding: 8px 12px;
+    width: 100%;
+    border: none;
+    border-top: 1px solid var(--gray-suit);
+    border-bottom: 1px solid var(--gray-suit);
+    border-radius: 0;
+    outline: none;
+    color: var(--mine-shaft);
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.contact__input::placeholder {
+    color: var(--silver-chalice);
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.contact__delete {
+    padding: 7px;
+    border: 1px solid var(--gray-suit);
+    background-color: var(--mischka);
+    transition: border-color 0.3s ease-in-out;
+}
+
+.contact__svg-delete {
+    fill: var(--silver-chalice);
+    transition: fill 0.3s ease-in-out;
+}
+
+.contact__delete.focus-visible {
+    border-color: var(--red)
+}
+
+.contact__delete.focus-visible .contact__svg-delete {
+    fill: var(--red);
 }
 
 .add-contact-btn {
     margin: 0 auto;
-    padding: 8px 0 8px;
 }
 
 .add-contact-btn__text {
@@ -420,36 +527,35 @@ html {
 .modal-form__errors-box {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
-    padding: 10px 30px;
+    padding: 8px 30px;
+    min-height: 25px;
     color: var(--red);
     font-size: 10px;
     line-height: 14px;
 }
 
 .accept-btn {
-    /* display: flex;
-    align-items: center; */
+    position: relative;
     align-self: center;
     margin-bottom: 5px;
     padding: 12.5px 35px;
     background-color: var(--purpule);
-    transition: background-color 0.3s ease-in-out;
-}
-
-.accept-btn__text {
-    position: relative;
     color: var(--white);
     font-weight: 600;
     font-size: 14px;
     line-height: 19px;
+    transition: background-color 0.3s ease-in-out;
 }
 
-.accept-btn__text::before {
+.accept-btn:disabled {
+    background-color: var(--electric-violet)
+}
+
+.accept-btn::before {
     content: '';
     position: absolute;
-    top: 4px;
-    left: -17px;
+    top: 16px;
+    left: 17px;
     width: 12px;
     height: 12px;
     background-image: url('../img/loading.svg');
@@ -459,7 +565,7 @@ html {
     transition: visibility 0.1s ease-in-out, opacity 0.1s ease-in-out;
 }
 
-.accept-btn__text--load::before {
+.accept-btn--load::before {
     opacity: 1;
     visibility: visible;
 }
