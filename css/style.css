@@ -394,6 +394,10 @@ html {
     background-color: rgba(200, 197, 209, 0.3);
 }
 
+.modal-form__contacts--large-padding {
+    padding: 25px 30px;
+}
+
 .contact {
     display: flex;
     margin-bottom: 15px;
@@ -523,7 +527,7 @@ html {
     fill: var(--red);
 }
 
-.contact__delete-btn--show {
+.contact.show-delete-btn > .contact__delete-btn {
     display: block;
 }
 
