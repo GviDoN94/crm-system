@@ -118,14 +118,6 @@ html {
     cursor: pointer;
 }
 
-.subtitle {
-    margin: 0;
-    color: var(--mine-shaft);
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 25px;
-}
-
 .header {
     margin-bottom: 40px;
     background-color: var(--white);
@@ -318,8 +310,14 @@ html {
     margin-bottom: 32px;
 }
 
-.modal-form__title {
+.modal-form__title,
+.modal-delete__title {
+    margin: 0;
     margin-right: 9px;
+    color: var(--mine-shaft);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 25px;
 }
 
 .modal-form__client-id {
@@ -611,7 +609,8 @@ html {
     visibility: visible;
 }
 
-.cansel-btn {
+.cansel-btn,
+.delete-btn {
     align-self: center;
     color: var(--mine-shaft);
     font-size: 12px;
