@@ -387,12 +387,12 @@ html {
     border-bottom: 1px solid rgba(240, 106, 77, 0.5);
 }
 
-.modal-form__contacts {
+.modal-form__add-contacts {
     padding: 8px 30px;
     background-color: rgba(200, 197, 209, 0.3);
 }
 
-.modal-form__contacts--large-padding {
+.modal-form__add-contacts--large-padding {
     padding: 25px 30px;
 }
 
