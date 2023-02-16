@@ -390,6 +390,7 @@ html {
 .modal-form__add-contacts {
     padding: 8px 30px;
     background-color: rgba(200, 197, 209, 0.3);
+    transition: padding 0.3s ease-in-out;
 }
 
 .modal-form__add-contacts--large-padding {

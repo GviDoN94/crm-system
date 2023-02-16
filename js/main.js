@@ -74,6 +74,16 @@ window.addEventListener('DOMContentLoaded', () => {
             position: 'bottom',
             shouldSort: false,
         });
+        contact.querySelector('.contact__delete-btn')
+               .addEventListener('click', () => {
+            contact.remove();
+            if (!contactsContainerFormAdd
+                    .querySelectorAll('.contact').length) {
+                    addContactsFormAdd.classList.remove(
+                        'modal-form__add-contacts--large-padding'
+                    );
+                }
+        });
     }
 
     async function postData(url, data) {
@@ -130,7 +140,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         'modal-form__add-contacts--large-padding'
                     );
                 }
-            createContactInput(contactsContainerFormAdd);
+            createContactInput(contactsContainerFormAdd, true);
         }
     });
 

@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SKB</title>
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">
-    <link rel="preload" href="fonts/OpenSansRegular.woff2" as="font" type="font/woff2">
-    <link rel="preload" href="fonts/OpenSansRegular.woff" as="font" type="font/woff">
-    <link rel="preload" href="fonts/OpenSansSemiBold.woff2" as="font" type="font/woff2">
-    <link rel="preload" href="fonts/OpenSansSemiBold.woff" as="font" type="font/woff">
-    <link rel="preload" href="fonts/OpenSansBold.woff2" as="font" type="font/woff2">
-    <link rel="preload" href="fonts/OpenSansBold.woff" as="font" type="font/woff">
+    <link rel="preload" href="fonts/OpenSansRegular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/OpenSansRegular.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="fonts/OpenSansSemiBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/OpenSansSemiBold.woff" as="font" type="font/woff" crossorigin>
+    <link rel="preload" href="fonts/OpenSansBold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/OpenSansBold.woff" as="font" type="font/woff" crossorigin>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="libs/choices-js/choices.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -143,10 +143,12 @@
                         </div>
                     </div>
                     <div class="modal-form__add-contacts">
+                        <div class="modal-form__contacts-container"></div>
                         <button class="btn-reset add-contact-btn" type="button">
                             <span class="add-contact-btn__text">Добавить контакт</span>
                         </button>
                     </div>
+                    <div class="modal-form__errors-box"></div>
                     <button class="btn-reset accept-btn" type="submit">
                         <span class="accept-btn__text">Сохранить</span>
                     </button>
