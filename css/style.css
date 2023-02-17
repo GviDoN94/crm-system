@@ -399,10 +399,17 @@ html {
 
 .contact {
     display: flex;
-    margin-bottom: 15px;
+    margin: 0;
+    transform: scaleY(0);
+    transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
 }
 
-.contact:last-of-type {
+.contact.animate-add {
+    margin-bottom: 15px;
+    transform: scaleY(1);
+}
+
+.contact.animate:last-of-type {
     margin-bottom: 25px;
 }
 

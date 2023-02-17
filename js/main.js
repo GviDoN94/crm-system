@@ -74,15 +74,19 @@ window.addEventListener('DOMContentLoaded', () => {
             position: 'bottom',
             shouldSort: false,
         });
+        setTimeout(() => contact.classList.add('animate-add'));
         contact.querySelector('.contact__delete-btn')
                .addEventListener('click', () => {
-            contact.remove();
-            if (!contactsContainerFormAdd
+            contact.classList.remove('animate-add');
+            setTimeout(() => {
+                contact.remove();
+                if (!contactsContainerFormAdd
                     .querySelectorAll('.contact').length) {
                     addContactsFormAdd.classList.remove(
                         'modal-form__add-contacts--large-padding'
                     );
                 }
+            }, 350);
         });
     }
 
