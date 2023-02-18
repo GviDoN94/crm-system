@@ -86,6 +86,14 @@ window.addEventListener('DOMContentLoaded', () => {
                         'modal-form__add-contacts--large-padding'
                     );
                 }
+                if (contactsContainerFormAdd
+                    .querySelectorAll('.contact').length < 10 &&
+                addContactBtn.classList.contains('hide')) {
+                    addContactBtn.classList.remove('hide');
+                    contactsContainerFormAdd
+                        .classList
+                        .add('modal-form__contacts-container--margin-bottom');
+                }
             }, 350);
         });
     }
@@ -110,6 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
           contactsContainerFormAdd = formAdd.querySelector(
               '.modal-form__contacts-container'
           ),
+          addContactBtn = formAdd.querySelector('.add-contact-btn'),
           errorsFormAdd = formAdd.querySelector('.modal-form__errors-box'),
           acceptAddBtn = formAdd.querySelector('.accept-btn'),
           modalChange = document.querySelector('#modal-change'),
@@ -121,6 +130,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     modalAdd.addEventListener('click', e => {
         const event = e.target;
+
         if (event === modalAdd ||
             event.closest('.close-btn') ||
             event.closest('.cansel-btn')) {
@@ -144,7 +154,19 @@ window.addEventListener('DOMContentLoaded', () => {
                         'modal-form__add-contacts--large-padding'
                     );
                 }
+
             createContactInput(contactsContainerFormAdd, true);
+            contactsContainerFormAdd
+                .classList
+                .add('modal-form__contacts-container--margin-bottom');
+
+            if (contactsContainerFormAdd
+                    .querySelectorAll('.contact').length >= 10) {
+                    addContactBtn.classList.add('hide');
+                    contactsContainerFormAdd
+                    .classList
+                    .remove('modal-form__contacts-container--margin-bottom');
+            }
         }
     });
 

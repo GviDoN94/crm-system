@@ -397,6 +397,10 @@ html {
     padding: 25px 30px;
 }
 
+.modal-form__contacts-container.modal-form__contacts-container--margin-bottom {
+    margin-bottom: 25px;
+}
+
 .contact {
     display: flex;
     margin: 0;
@@ -409,8 +413,8 @@ html {
     transform: scaleY(1);
 }
 
-.contact.animate:last-of-type {
-    margin-bottom: 25px;
+.contact:last-child {
+    margin-bottom: 0px;
 }
 
 .choices {
@@ -539,6 +543,10 @@ html {
 
 .add-contact-btn {
     margin: 0 auto;
+}
+
+.add-contact-btn.hide {
+    display: none;
 }
 
 .add-contact-btn__text {
