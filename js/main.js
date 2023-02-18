@@ -80,15 +80,18 @@ window.addEventListener('DOMContentLoaded', () => {
             contact.classList.remove('animate-add');
             setTimeout(() => {
                 contact.remove();
-                if (!contactsContainerFormAdd
-                    .querySelectorAll('.contact').length) {
+                const amountImputs = contactsContainerFormAdd
+                                    .querySelectorAll('.contact').length;
+                if (!amountImputs) {
                     addContactsFormAdd.classList.remove(
                         'modal-form__add-contacts--large-padding'
                     );
+                    contactsContainerFormAdd
+                        .classList
+                        .remove('modal-form__contacts-container--margin-bottom');
                 }
-                if (contactsContainerFormAdd
-                    .querySelectorAll('.contact').length < 10 &&
-                addContactBtn.classList.contains('hide')) {
+                if (amountImputs < 10 &&
+                    addContactBtn.classList.contains('hide')) {
                     addContactBtn.classList.remove('hide');
                     contactsContainerFormAdd
                         .classList
@@ -137,9 +140,12 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal(modalAdd);
             formAdd.reset();
             contactsContainerFormAdd.innerHTML = '';
-            addContactsFormAdd.classList.remove(
-                'modal-form__add-contacts--large-padding'
-            );
+            addContactsFormAdd
+                .classList
+                .remove('modal-form__add-contacts--large-padding');
+            contactsContainerFormAdd
+                .classList
+                .remove('modal-form__contacts-container--margin-bottom');
             errorsFormAdd.innerHTML = '';
             inputsFormAdd.forEach(input =>
                 input.classList.remove('modal-form__input--error')
@@ -148,22 +154,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (event.closest('.add-contact-btn')) {
             if (!addContactsFormAdd.classList
-                    .contains('modal-form__add-contacts--large-padding')
-                ) {
-                    addContactsFormAdd.classList.add(
-                        'modal-form__add-contacts--large-padding'
-                    );
-                }
+                    .contains('modal-form__add-contacts--large-padding')) {
+                addContactsFormAdd.classList.add(
+                    'modal-form__add-contacts--large-padding'
+                );
+            }
+            if (!contactsContainerFormAdd.classList
+                    .contains('modal-form__contacts-container--margin-bottom')) {
+                contactsContainerFormAdd
+                    .classList
+                    .add('modal-form__contacts-container--margin-bottom');
+            }
 
             createContactInput(contactsContainerFormAdd, true);
-            contactsContainerFormAdd
-                .classList
-                .add('modal-form__contacts-container--margin-bottom');
 
             if (contactsContainerFormAdd
                     .querySelectorAll('.contact').length >= 10) {
-                    addContactBtn.classList.add('hide');
-                    contactsContainerFormAdd
+                addContactBtn.classList.add('hide');
+                contactsContainerFormAdd
                     .classList
                     .remove('modal-form__contacts-container--margin-bottom');
             }
