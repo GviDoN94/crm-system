@@ -32,6 +32,22 @@ window.addEventListener('DOMContentLoaded', () => {
              .forEach(placeholder =>
                  placeholder.classList.remove('modal-form__placeholder--small')
         );
+        
+        // Don't forget!!!
+        
+        formAdd.reset();
+        contactsContainerFormAdd.innerHTML = '';
+        addContactsFormAdd
+            .classList
+            .remove('modal-form__add-contacts--large-padding');
+        contactsContainerFormAdd
+            .classList
+            .remove('modal-form__contacts-container--margin-bottom');
+        addContactBtn.classList.remove('hide');
+        errorsFormAdd.innerHTML = '';
+        inputsFormAdd.forEach(input =>
+            input.classList.remove('modal-form__input--error')
+        );
     }
 
     function createContactInput (parent, showDeleteBtn = false) {
@@ -85,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 contact.remove();
                 const amountImputs = contactsContainerFormAdd
-                                    .querySelectorAll('.contact').length;
+                                        .querySelectorAll('.contact').length;
                 if (!amountImputs) {
                     addContactsFormAdd.classList.remove(
                         'modal-form__add-contacts--large-padding'
@@ -146,18 +162,6 @@ window.addEventListener('DOMContentLoaded', () => {
             event.closest('.close-btn') ||
             event.closest('.cansel-btn')) {
             closeModal(modalAdd);
-            formAdd.reset();
-            contactsContainerFormAdd.innerHTML = '';
-            addContactsFormAdd
-                .classList
-                .remove('modal-form__add-contacts--large-padding');
-            contactsContainerFormAdd
-                .classList
-                .remove('modal-form__contacts-container--margin-bottom');
-            errorsFormAdd.innerHTML = '';
-            inputsFormAdd.forEach(input =>
-                input.classList.remove('modal-form__input--error')
-            );
         }
 
         if (event.closest('.add-contact-btn')) {
@@ -235,7 +239,6 @@ window.addEventListener('DOMContentLoaded', () => {
                         });
                     });
                 } else {
-                    formAdd.reset();
                     closeModal(modalAdd);
                 }
             })

@@ -40,27 +40,45 @@
                 <table class="table">
                     <thead class="table__head">
                         <tr class="table__head-row">
-                            <th class="table__id">
+                            <th class="table__head-cell table__id">
                                 <span class="table__head-text">ID</span> 
                             </th>
-                            <th class="table__full-name">
+                            <th class="table__head-cell table__name">
                                 <span class="table__head-text">Фамилия Имя Отчество</span>
                             </th>
-                            <th class="table__create-date">
+                            <th class="table__head-cell table__creation-date">
                                 <span class="table__head-text">Дата и&nbsp;время создания</span>
                             </th>
-                            <th class="table__last-changes">
+                            <th class="table__head-cell table__last-change">
                                 <span class="table__head-text">Последние изменения</span>
                             </th>
-                            <th class="table__contacts">
+                            <th class="table__head-cell table__contacts">
                                 <span class="table__head-text">Контакты</span>
                             </th>
-                            <th class="table__actions">
+                            <th class="table__head-cell table__actions">
                                 <span class="table__head-text">Действия</span>
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="table__body"></tbody>
+                    <tbody class="table__body">
+                        <tr class="client">
+                            <td class="table__client-cell client-id">123455</td>
+                            <td class="table__client-cell client-name">Скворцов Денис Юрьевич</td>
+                            <td class="table__client-cell client-creation">
+                                <span class="client-creation__date">21.02.2021</span>
+                                <span class="client-creation__time">12:41</span>
+                            </td>
+                            <td class="table__client-cell client-change">
+                                <span class="client-change__date">21.02.2021</span>
+                                <span class="client-change__time">14:50</span>
+                            </td>
+                            <td class="table__client-cell client-contacts"></td>
+                            <td class="table__client-cell client-actions">
+                                <button class="client__change-btn btn-reset">Изменить</button>
+                                <button class="client__delete-btn btn-reset">Удалить</button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
                 <button class="btn-reset add-client-btn">
                     <svg class="add-client-btn__svg" width="23" height="16" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg">

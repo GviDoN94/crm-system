@@ -169,29 +169,46 @@ html {
 }
 
 .table {
+    text-align: left;
     margin-bottom: 40px;
+    border-collapse: collapse;
     width: 100%;
 }
 
+.table__head-cell {
+    padding: 8px;
+}
+
+.table__head-cell:first-child,
+.table__client-cell:first-child {
+    padding-left: 20px;
+}
+
+.table__head-cell:last-child,
+.table__client-cell:last-child {
+    padding-right: 20px;
+}
+
 .table__head-text {
+    color: var(--silver-chalice);
+    font-weight: 400;
     font-size: 12px;
     line-height: 16px;
-    color: var(--silver-chalice);
 }
 
 .table__id .table__head-text,
-.table__full-name .table__head-text,
-.table__create-date .table__head-text,
-.table__last-changes .table__head-text {
+.table__name .table__head-text,
+.table__creation-date .table__head-text,
+.table__last-change .table__head-text {
     position: relative;
     padding-right: 10px;
     cursor: pointer;
 }
 
 .table__id .table__head-text::before,
-.table__full-name .table__head-text::before,
-.table__create-date .table__head-text::before,
-.table__last-changes .table__head-text::before {
+.table__name .table__head-text::before,
+.table__creation-date .table__head-text::before,
+.table__last-change .table__head-text::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -202,7 +219,7 @@ html {
     background-image: url('../img/arrow.svg');
 }
 
-.table__full-name .table__head-text::after {
+.table__name .table__head-text::after {
     content: "А-Я";
     position: absolute;
     top: 50%;
@@ -212,6 +229,85 @@ html {
     font-size: 10px;
     line-height: 14px;
     color: var(--purpule);
+}
+
+.table__client-cell {
+    padding: 20px 0;
+}
+
+.client {
+    border-bottom: 1px solid rgba(200, 197, 209, 0.5);
+    background-color: var(--white);
+}
+
+.client-id {
+    color: var(--silver-chalice);
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.client-name {
+    color: var(--mine-shaft);
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.client-creation,
+.client-change {
+    font-size: 0;
+}
+
+.client-creation__date,
+.client-change__date,
+.client-creation__time,
+.client-change__time {
+    font-size: 14px;
+}
+
+.client-creation__date,
+.client-change__date {
+    margin-right: 7px;
+}
+
+.client-creation__time,
+.client-change__time {
+    color: var(--silver-chalice)
+}
+
+.client__change-btn,
+.client__delete-btn {
+    position: relative;
+    padding-left: 15px;
+    color: var(--mine-shaft);
+    font-size: 14px;
+    line-height: 19px;
+}
+
+.client__change-btn::before,
+.client__delete-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    opacity: 0.7;
+    font-size: 0;
+    background-repeat: no-repeat;
+    transform: translateY(-50%);
+}
+
+.client__change-btn::before {
+    height: 13px;
+    background-image: url('../img/change-icon.svg');
+}
+
+.client__delete-btn::before {
+    background-image: url('../img/delete-icon.svg');
+}
+
+.client__change-btn {
+    margin-right: 32px;
 }
 
 .add-client-btn {
