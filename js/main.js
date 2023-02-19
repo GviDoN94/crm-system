@@ -105,6 +105,10 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function AddCapitalLetter(value) {
+        return value[0].toUpperCase() + value.slice(1).toLowerCase();
+    }
+
     async function postData(url, data) {
         const result = await fetch(url, {
             method: 'POST',
@@ -204,8 +208,10 @@ window.addEventListener('DOMContentLoaded', () => {
               formContacts = formAdd.querySelectorAll('.contact'),
               newClient = {};
               formInputs.forEach(input => {
-                  newClient[input.name] = input.value;
-                });
+                  if (input.value.trim()) {
+                      newClient[input.name] = AddCapitalLetter(input.value);
+                  }
+              });
         newClient.contacts = [];
         formContacts.forEach(item => {
             const selectEl = item.querySelector('.contact__select'),
