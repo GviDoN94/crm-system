@@ -28,6 +28,10 @@ window.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('is-open-modal');
         modal.querySelector('.modal__content')
              .classList.remove('modal-open', 'animate-open');
+        modal.querySelectorAll('.modal-form__placeholder--small')
+             .forEach(placeholder =>
+                 placeholder.classList.remove('modal-form__placeholder--small')
+        );
     }
 
     function createContactInput (parent, showDeleteBtn = false) {
@@ -37,12 +41,12 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         contact.innerHTML =
             `
-                <select class="contact__select" name="" id="">
-                    <option value="">Телефон</option>
-                    <option value="">Доп. телефон</option>
-                    <option value="">Email</option>
-                    <option value="">Vk</option>
-                    <option value="">Facebook</option>
+                <select class="contact__select">
+                    <option value="Телефон">Телефон</option>
+                    <option value="Email">Email</option>
+                    <option value="Vk">Vk</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Другое">Другое</option>
                 </select>
                 <input
                     class="contact__input"
@@ -74,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
             position: 'bottom',
             shouldSort: false,
         });
-        setTimeout(() => contact.classList.add('animate-add'));
+        setTimeout(() => contact.classList.add('animate-add'), 10);
         contact.querySelector('.contact__delete-btn')
                .addEventListener('click', () => {
             contact.classList.remove('animate-add');
@@ -196,8 +200,22 @@ window.addEventListener('DOMContentLoaded', () => {
         acceptAddBtn.classList.add('accept-btn--load');
         acceptAddBtn.disabled = true;
 
-        const formData = new FormData(formAdd),
-              newClient = Object.fromEntries(formData.entries());
+        const formInputs = formAdd.querySelectorAll('.modal-form__input'),
+              formContacts = formAdd.querySelectorAll('.contact'),
+              newClient = {};
+              formInputs.forEach(input => {
+                  newClient[input.name] = input.value;
+                });
+        newClient.contacts = [];
+        formContacts.forEach(item => {
+            const selectEl = item.querySelector('.contact__select'),
+                  inputEl = item.querySelector('.contact__input'),
+                  contactObj = {
+                      type: selectEl.value,
+                      value: inputEl.value
+                  };
+            newClient.contacts.push(contactObj);
+        });
 
         postData('http://localhost:3500/api/clients', newClient)
             .then((data) => {
