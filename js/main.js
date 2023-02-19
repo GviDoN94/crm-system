@@ -32,7 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
              .forEach(placeholder =>
                  placeholder.classList.remove('modal-form__placeholder--small')
         );
-        
+
         // Don't forget!!!
         
         formAdd.reset();
@@ -50,11 +50,8 @@ window.addEventListener('DOMContentLoaded', () => {
         );
     }
 
-    function createContactInput (parent, showDeleteBtn = false) {
+    function createContactInput (parent) {
         const contact = createElement('div', parent, '', ['contact']);
-        if (showDeleteBtn) {
-            contact.classList.add('show-delete-btn');
-        }
         contact.innerHTML =
             `
                 <select class="contact__select">
@@ -178,7 +175,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     .add('modal-form__contacts-container--margin-bottom');
             }
 
-            createContactInput(contactsContainerFormAdd, true);
+            createContactInput(contactsContainerFormAdd);
 
             if (contactsContainerFormAdd
                     .querySelectorAll('.contact').length >= 10) {
@@ -187,6 +184,13 @@ window.addEventListener('DOMContentLoaded', () => {
                     .classList
                     .remove('modal-form__contacts-container--margin-bottom');
             }
+        }
+
+        if (event.closest('.choices')) {
+            contactsContainerFormAdd.querySelectorAll('.contact')
+                .forEach(contact =>
+                    contact.classList.remove('contact--z-index'));
+            event.closest('.contact').classList.add('contact--z-index');
         }
     });
 

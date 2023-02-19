@@ -498,10 +498,15 @@ html {
 }
 
 .contact {
+    position: relative;
     display: flex;
     margin: 0;
     transform: scaleY(0);
     transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
+}
+
+.contact.contact--z-index {
+    z-index: 1;
 }
 
 .contact.animate-add {
@@ -613,7 +618,6 @@ html {
 .contact__delete-btn {
     position: relative;
     left: -1px;
-    display: none;
     padding: 7px;
     border: 1px solid var(--gray-suit);
     background-color: var(--mischka);
@@ -631,10 +635,6 @@ html {
 
 .contact__delete-btn-btn.focus-visible .contact__svg-delete {
     fill: var(--red);
-}
-
-.contact.show-delete-btn > .contact__delete-btn {
-    display: block;
 }
 
 .add-contact-btn {
