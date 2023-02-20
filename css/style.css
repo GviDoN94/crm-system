@@ -38,6 +38,18 @@
 }
 
 @media (min-width: 1025px) {
+    .client__contact:hover:not(.focus-visible) {
+        opacity: 1;
+    }
+
+    .client__change-btn:hover:not(.focus-visible) {
+        color: var(--purpule);
+    }
+    
+    .client__delete-btn:hover:not(.focus-visible) {
+        color: var(--red);
+    }
+
     .add-client-btn:hover:not(.focus-visible),
     .accept-btn:hover:not(.focus-visible):not(:disabled) {
         background-color: var(--melrose);
@@ -176,17 +188,7 @@ html {
 }
 
 .table__head-cell {
-    padding: 8px;
-}
-
-.table__head-cell:first-child,
-.table__client-cell:first-child {
-    padding-left: 20px;
-}
-
-.table__head-cell:last-child,
-.table__client-cell:last-child {
-    padding-right: 20px;
+    padding: 8px 0;
 }
 
 .table__head-text {
@@ -231,47 +233,112 @@ html {
     color: var(--purpule);
 }
 
-.table__client-cell {
-    padding: 20px 0;
-}
-
 .client {
     border-bottom: 1px solid rgba(200, 197, 209, 0.5);
     background-color: var(--white);
 }
 
-.client-id {
+.table__client-cell {
+    padding: 10px 0;
+    padding-right: 10px;
+    height: 60px;
+    font-size: 0;
+}
+
+.table__head-cell:first-child,
+.table__client-cell:first-child  {
+    padding-left: 20px;
+}
+
+.table__head-cell:last-child,
+.table__client-cell:last-child {
+    padding-right: 20px;
+}
+
+.client__id {
     color: var(--silver-chalice);
     font-size: 12px;
     line-height: 16px;
 }
 
-.client-name {
+.client__name {
     color: var(--mine-shaft);
     font-size: 14px;
     line-height: 19px;
 }
 
-.client-creation,
-.client-change {
+.client__creation,
+.client__change {
     font-size: 0;
 }
 
-.client-creation__date,
-.client-change__date,
-.client-creation__time,
-.client-change__time {
+.client__creation-date,
+.client__change-date,
+.client__creation-time,
+.client__change-time {
     font-size: 14px;
 }
 
-.client-creation__date,
-.client-change__date {
+.client__creation-date,
+.client__change-date {
     margin-right: 7px;
 }
 
-.client-creation__time,
-.client-change__time {
+.client__contacts {
+}
+
+.client__contacts-wrap {
+    width: 117px;
+}
+
+.client__contact {
+    margin-bottom: 7px;
+    margin-right: 7px;
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.client__contact:nth-child(5n) {
+    margin-right: 0;
+}
+
+.client__contact:nth-child(n+5) {
+    margin-bottom: 0;
+}
+
+.client__contact.focus-visible {
+    opacity: 1;
+}
+
+.client__contact--vk {
+    background-image: url(../img/vk-icon.svg);
+}
+
+.client__contact--fb {
+    background-image: url(../img/fb-icon.svg);
+}
+
+.client__contact--phone {
+    background-image: url(../img/phone-icon.svg);
+}
+
+.client__contact--mail      {
+    background-image: url(../img/mail-icon.svg);
+}
+
+.client__contact--other {
+    background-image: url(../img/other-icon.svg);
+}
+
+.client__creation-time,
+.client__change-time {
     color: var(--silver-chalice)
+}
+
+.client__actions {
+    width: 217px;
 }
 
 .client__change-btn,
@@ -281,6 +348,19 @@ html {
     color: var(--mine-shaft);
     font-size: 14px;
     line-height: 19px;
+    transition: color 0.3s ease-in-out;
+}
+
+.client__change-btn {
+    margin-right: 32px;
+}
+
+.client__change-btn.focus-visible {
+    color: var(--purpule);
+}
+
+.client__delete-btn.focus-visible {
+    color: var(--red);
 }
 
 .client__change-btn::before,
@@ -304,10 +384,6 @@ html {
 
 .client__delete-btn::before {
     background-image: url('../img/delete-icon.svg');
-}
-
-.client__change-btn {
-    margin-right: 32px;
 }
 
 .add-client-btn {

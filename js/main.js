@@ -66,7 +66,11 @@ window.addEventListener('DOMContentLoaded', () => {
                     type="text"
                     placeholder="Введите данные контакта"
                 >
-                <button class="btn-reset contact__delete-btn" type="button">
+                <button
+                    class="btn-reset contact__delete-btn"
+                    type="button"
+                    aria-label="Удалить контакт"
+                >
                     <svg
                         class="contact__svg-delete"
                         width="12" height="12"
@@ -191,7 +195,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 .forEach(contact =>
                     contact.classList.remove('contact--z-index'));
             event.closest('.contact').classList.add('contact--z-index');
-        }
+        } 
     });
 
     document.querySelectorAll('.modal-form__input').forEach(input => {

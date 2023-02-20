@@ -61,26 +61,39 @@
                         </tr>
                     </thead>
                     <tbody class="table__body">
-                        <tr class="client">
-                            <td class="table__client-cell client-id">123455</td>
-                            <td class="table__client-cell client-name">Скворцов Денис Юрьевич</td>
-                            <td class="table__client-cell client-creation">
-                                <span class="client-creation__date">21.02.2021</span>
-                                <span class="client-creation__time">12:41</span>
+                        <!-- <tr class="client">
+                            <td class="table__client-cell client__id">1234551111111</td>
+                            <td class="table__client-cell client__name">Скворцов Денис Юрьевич</td>
+                            <td class="table__client-cell client__creation">
+                                <span class="client__creation-date">21.02.2021</span>
+                                <span class="client__creation-time">12:41</span>
                             </td>
-                            <td class="table__client-cell client-change">
-                                <span class="client-change__date">21.02.2021</span>
-                                <span class="client-change__time">14:50</span>
+                            <td class="table__client-cell client__change">
+                                <span class="client__change-date">21.02.2021</span>
+                                <span class="client__change-time">14:50</span>
                             </td>
-                            <td class="table__client-cell client-contacts"></td>
-                            <td class="table__client-cell client-actions">
+                            <td class="table__client-cell client__contacts">
+                                <div class="client__contacts-wrap">
+                                    <button class="client__contact client__contact--vk btn-reset"></button>
+                                    <button class="client__contact client__contact--fb btn-reset"></button>
+                                    <button class="client__contact client__contact--phone btn-reset"></button>
+                                    <button class="client__contact client__contact--mail btn-reset"></button>
+                                    <button class="client__contact client__contact--other btn-reset"></button>
+                                    <button class="client__contact client__contact--other btn-reset"></button>
+                                    <button class="client__contact client__contact--other btn-reset"></button>
+                                    <button class="client__contact client__contact--other btn-reset"></button>
+                                    <button class="client__contact client__contact--other btn-reset"></button>
+                                    <button class="client__contact client__contact--other btn-reset"></button>
+                                </div>
+                            </td>
+                            <td class="table__client-cell client__actions">
                                 <button class="client__change-btn btn-reset">Изменить</button>
                                 <button class="client__delete-btn btn-reset">Удалить</button>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
-                <button class="btn-reset add-client-btn">
+                <button class="btn-reset add-client-btn" aria-label="Закрыть модальное окно">
                     <svg class="add-client-btn__svg" width="23" height="16" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14.5 8C16.71 8 18.5 6.21 18.5 4C18.5 1.79 16.71 0 14.5 0C12.29 0 10.5 1.79 10.5 4C10.5 6.21 12.29 8 14.5 8ZM5.5 6V3H3.5V6H0.5V8H3.5V11H5.5V8H8.5V6H5.5ZM14.5 10C11.83 10 6.5 11.34 6.5 14V16H22.5V14C22.5 11.34 17.17 10 14.5 10Z"/>
                     </svg>
@@ -90,7 +103,7 @@
         </section>
         <div class="modal" id="modal-add">
             <div class="modal__content">
-                <button class="close-btn btn-reset">
+                <button class="close-btn btn-reset" aria-label="Закрыть модальное окно">
                     <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
                     </svg>                        
@@ -132,7 +145,7 @@
         </div>
         <div class="modal" id="modal-change">
             <div class="modal__content">
-                <button class="close-btn btn-reset">
+                <button class="close-btn btn-reset" aria-label="Закрыть модальное окно">
                     <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
                     </svg>
