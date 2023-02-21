@@ -171,6 +171,10 @@ html {
     color: var(--silver-chalice);
 }
 
+.hero {
+    padding-bottom: 50px;
+}
+
 .title {
     margin: 0;
     margin-bottom: 26px;

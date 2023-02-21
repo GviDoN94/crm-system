@@ -17,6 +17,10 @@ window.addEventListener('DOMContentLoaded', () => {
         return element;
     }
 
+    function AddCapitalLetter(value) {
+        return value[0].toUpperCase() + value.slice(1).toLowerCase();
+    }
+
     function openModal(modal) {
         const modalContent = modal.querySelector('.modal__content');
         modal.classList.add('is-open-modal');
@@ -109,7 +113,9 @@ window.addEventListener('DOMContentLoaded', () => {
                     );
                     contactsContainerFormAdd
                         .classList
-                        .remove('modal-form__contacts-container--margin-bottom');
+                        .remove(
+                            'modal-form__contacts-container--margin-bottom'
+                        );
                 }
                 if (amountImputs < 10 &&
                     addContactBtn.classList.contains('hide')) {
@@ -122,8 +128,9 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function AddCapitalLetter(value) {
-        return value[0].toUpperCase() + value.slice(1).toLowerCase();
+    async function getData(url) {
+        const result = await fetch(url);
+        return result.json();
     }
 
     async function postData(url, data) {
@@ -258,4 +265,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 acceptAddBtn.disabled = false;
             });
     });
+
+    getData('http://localhost:3500/api/clients')
+        .then(data => console.log(data))
+        .catch(() => console.log('Что-то пошло не так'));
 });
