@@ -17,8 +17,33 @@ window.addEventListener('DOMContentLoaded', () => {
         return element;
     }
 
-    function AddCapitalLetter(value) {
+    function addCapitalLetter(value) {
         return value[0].toUpperCase() + value.slice(1).toLowerCase();
+    }
+
+    function addFullName(obj) {
+        obj.fullName = `${obj.surname} ${obj.name} ${obj.lastName}`.trim();
+    }
+
+    function convertToDateObj(value) {
+        return new Date(value);
+    }
+
+    function getDateAndTime(dateObj) {
+        return {
+            date: dateObj.toLocaleDateString(),
+            time: dateObj.toLocaleTimeString().slice(0, 5)
+        };
+    }
+
+    function convertDataValues(arr) {
+        arr.forEach(item => {
+            addFullName(item);
+            item.createdAt = convertToDateObj(item.createdAt);
+            item.updatedAt = convertToDateObj(item.updatedAt);
+            item.created = getDateAndTime(item.createdAt);
+            item.updated = getDateAndTime(item.updatedAt);
+        });
     }
 
     function openModal(modal) {
@@ -131,14 +156,14 @@ window.addEventListener('DOMContentLoaded', () => {
         const client = createElement('tr', parent, '', ['client']);
         client.innerHTML =`
             <td class="table__client-cell client__id">${obj.id}</td>
-            <td class="table__client-cell client__name">${obj.name}</td>
+            <td class="table__client-cell client__name">${obj.fullName}</td>
             <td class="table__client-cell client__creation">
-                <span class="client__creation-date">21.02.2021</span>
-                <span class="client__creation-time">12:41</span>
+                <span class="client__creation-date">${obj.created.date}</span>
+                <span class="client__creation-time">${obj.created.time}</span>
             </td>
             <td class="table__client-cell client__change">
-                <span class="client__change-date">21.02.2021</span>
-                <span class="client__change-time">14:50</span>
+                <span class="client__change-date">${obj.updated.date}</span>
+                <span class="client__change-time">${obj.updated.time}</span>
             </td>
             <td class="table__client-cell client__contacts">
                 <div class="client__contacts-wrap"></div>
@@ -148,13 +173,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 <button class="client__delete-btn btn-reset">Удалить</button>
             </td>
         `;
-    }
-
-    function renderTable(arr, parent) {
-        const copyArr = [...arr];
-        parent.innerHTML = '';
-
-        copyArr.forEach(client => renderClient(client, parent));
     }
 
     async function getData(url) {
@@ -171,6 +189,19 @@ window.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify(data)
         });
         return await result.json();
+    }
+
+    function renderTable(parent) {
+        let clientsList = [];
+        parent.innerHTML = '';
+
+        getData('http://localhost:3500/api/clients')
+            .then(data => {
+                clientsList = [...data];
+                convertDataValues(clientsList);
+                clientsList.forEach(client => renderClient(client, parent));
+            })
+            .catch(() => console.log('Что-то пошло не так'));
     }
 
     const tBody = document.querySelector('.table__body'),
@@ -258,7 +289,8 @@ window.addEventListener('DOMContentLoaded', () => {
               newClient = {};
               formInputs.forEach(input => {
                   if (input.value.trim()) {
-                      newClient[input.name] = AddCapitalLetter(input.value);
+                      newClient[input.name] =
+                          addCapitalLetter(input.value).trim();
                   }
               });
         newClient.contacts = [];
@@ -285,6 +317,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     });
                 } else {
                     closeModal(modalAdd);
+                    renderTable(tBody);
                 }
             })
             .catch(() =>
@@ -296,7 +329,5 @@ window.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-    getData('http://localhost:3500/api/clients')
-        .then(data => renderTable(data, tBody))
-        .catch(() => console.log('Что-то пошло не так'));
+    renderTable(tBody);
 });

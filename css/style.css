@@ -192,7 +192,9 @@ html {
 }
 
 .table__head-cell {
+    vertical-align: bottom;
     padding: 8px 0;
+    padding-right: 10px;
 }
 
 .table__head-text {
@@ -225,11 +227,19 @@ html {
     background-image: url('../img/arrow.svg');
 }
 
+.table__name .table__head-text {
+    padding-right: 29px;
+}
+
+.table__name .table__head-text::before {
+    right: 20px;
+}
+
 .table__name .table__head-text::after {
     content: "А-Я";
     position: absolute;
     top: 50%;
-    right: -18px;
+    right: 0;
     transform: translateY(-50%);
     font-weight: 600;
     font-size: 10px;
@@ -286,9 +296,6 @@ html {
 .client__creation-date,
 .client__change-date {
     margin-right: 7px;
-}
-
-.client__contacts {
 }
 
 .client__contacts-wrap {
