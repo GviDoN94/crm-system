@@ -152,6 +152,37 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function renderContacts(arr, parent) {
+        arr.forEach(contact => {
+            let contactType = null;
+
+            switch (contact.type) {
+                case 'Телефон':
+                    contactType = 'client__contact--phone';
+                    break;
+                case 'Email':
+                    contactType = 'client__contact--mail';
+                    break;
+                case 'Vk':
+                    contactType = 'client__contact--vk';
+                    break;
+                case 'Facebook':
+                    contactType = 'client__contact--fb';
+                    break;
+                case 'Другое':
+                    contactType = 'client__contact--other';
+                    break;
+
+                default:
+                    break;
+            }
+
+            createElement(
+                'li', parent, '', ['client__contact', contactType]
+            );
+        });
+    }
+
     function renderClient (obj, parent) {
         const client = createElement('tr', parent, '', ['client']);
         client.innerHTML =`
@@ -166,13 +197,17 @@ window.addEventListener('DOMContentLoaded', () => {
                 <span class="client__change-time">${obj.updated.time}</span>
             </td>
             <td class="table__client-cell client__contacts">
-                <div class="client__contacts-wrap"></div>
+                <ul class="client__contacts-list"></ul>
             </td>
             <td class="table__client-cell client__actions">
                 <button class="client__change-btn btn-reset">Изменить</button>
                 <button class="client__delete-btn btn-reset">Удалить</button>
             </td>
         `;
+        renderContacts(
+            obj.contacts,
+            client.querySelector('.client__contacts-list')
+        ); 
     }
 
     async function getData(url) {
