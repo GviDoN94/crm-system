@@ -179,8 +179,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
             const contactEl = createElement(
                 'li', parent, '', ['client__contact']
-            );
-            createElement('button', contactEl, '', ['btn-reset', 'client__contact-btn', contactType]);
+            ),
+                  contactBtn = createElement(
+                'button',
+                contactEl,
+                '',
+                ['btn-reset', 'client__contact-btn', contactType]);
+            contactBtn.ariaLabel = `Тип контакта: ${contact.type}`;
         });
     }
 
