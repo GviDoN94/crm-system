@@ -38,7 +38,7 @@
 }
 
 @media (min-width: 1025px) {
-    .client__contact:hover:not(.focus-visible) {
+    .client__contact-btn:hover:not(.focus-visible) {
         opacity: 1;
     }
 
@@ -308,11 +308,7 @@ html {
     display: inline-block;
     margin-bottom: 7px;
     margin-right: 7px;
-    width: 16px;
-    height: 16px;
-    opacity: 0.7;
-    transition: opacity 0.3s ease-in-out;
-    cursor: pointer;
+
 }
 
 .client__contact:nth-child(5n) {
@@ -323,27 +319,35 @@ html {
     margin-bottom: 0;
 }
 
-.client__contact.focus-visible {
+.client__contact-btn {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.client__contact-btn.focus-visible {
     opacity: 1;
 }
 
-.client__contact--vk {
+.client__contact-btn--vk {
     background-image: url(../img/vk-icon.svg);
 }
 
-.client__contact--fb {
+.client__contact-btn--fb {
     background-image: url(../img/fb-icon.svg);
 }
 
-.client__contact--phone {
+.client__contact-btn--phone {
     background-image: url(../img/phone-icon.svg);
 }
 
-.client__contact--mail      {
+.client__contact-btn--mail      {
     background-image: url(../img/mail-icon.svg);
 }
 
-.client__contact--other {
+.client__contact-btn--other {
     background-image: url(../img/other-icon.svg);
 }
 

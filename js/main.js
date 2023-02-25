@@ -158,28 +158,29 @@ window.addEventListener('DOMContentLoaded', () => {
 
             switch (contact.type) {
                 case 'Телефон':
-                    contactType = 'client__contact--phone';
+                    contactType = 'client__contact-btn--phone';
                     break;
                 case 'Email':
-                    contactType = 'client__contact--mail';
+                    contactType = 'client__contact-btn--mail';
                     break;
                 case 'Vk':
-                    contactType = 'client__contact--vk';
+                    contactType = 'client__contact-btn--vk';
                     break;
                 case 'Facebook':
-                    contactType = 'client__contact--fb';
+                    contactType = 'client__contact-btn--fb';
                     break;
                 case 'Другое':
-                    contactType = 'client__contact--other';
+                    contactType = 'client__contact-btn--other';
                     break;
 
                 default:
                     break;
             }
 
-            createElement(
-                'li', parent, '', ['client__contact', contactType]
+            const contactEl = createElement(
+                'li', parent, '', ['client__contact']
             );
+            createElement('button', contactEl, '', ['btn-reset', 'client__contact-btn', contactType]);
         });
     }
 
