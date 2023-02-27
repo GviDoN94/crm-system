@@ -38,7 +38,7 @@
 }
 
 @media (min-width: 1025px) {
-    .client__contact-btn:hover:not(.focus-visible) {
+    .client__contact-link:hover:not(.focus-visible) {
         opacity: 1;
     }
 
@@ -127,6 +127,13 @@ html {
     border: none;
     outline: none;
     background-color: transparent;
+    cursor: pointer;
+}
+
+.link {
+    display: inline-block;
+    outline: none;
+    text-decoration: none;
     cursor: pointer;
 }
 
@@ -298,6 +305,11 @@ html {
     margin-right: 7px;
 }
 
+.client__creation-time,
+.client__change-time {
+    color: var(--silver-chalice)
+}
+
 .client__contacts-list {
     padding: 0;
     width: 117px;
@@ -319,41 +331,73 @@ html {
     margin-bottom: 0;
 }
 
-.client__contact-btn {
+.client__contact-link {
     width: 16px;
     height: 16px;
     opacity: 0.7;
     transition: opacity 0.3s ease-in-out;
-    cursor: pointer;
 }
 
-.client__contact-btn.focus-visible {
+.client__contact-link.focus-visible {
     opacity: 1;
 }
 
-.client__contact-btn--vk {
+.client__contact-link--vk {
     background-image: url(../img/vk-icon.svg);
 }
 
-.client__contact-btn--fb {
+.client__contact-link--fb {
     background-image: url(../img/fb-icon.svg);
 }
 
-.client__contact-btn--phone {
+.client__contact-link--phone {
     background-image: url(../img/phone-icon.svg);
 }
 
-.client__contact-btn--mail      {
+.client__contact-link--mail      {
     background-image: url(../img/mail-icon.svg);
 }
 
-.client__contact-btn--other {
+.client__contact-link--other {
     background-image: url(../img/other-icon.svg);
 }
 
 .client__creation-time,
 .client__change-time {
     color: var(--silver-chalice)
+}
+
+.tippy-box[data-theme~='mine-shaft'] {
+    border-radius: 0;
+    background-color: var(--mine-shaft);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.tippy-box[data-theme~='mine-shaft'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: var(--mine-shaft);
+}
+
+.tippy-box[data-theme~='mine-shaft'][data-placement^='bottom'] > .tippy-arrow::before {
+    border-bottom-color: var(--mine-shaft);
+}
+
+.tippy-box[data-theme~='mine-shaft'][data-placement^='left'] > .tippy-arrow::before {
+    border-left-color: var(--mine-shaft);
+}
+
+.tippy-box[data-theme~='mine-shaft'][data-placement^='right'] > .tippy-arrow::before {
+    border-right-color: var(--mine-shaft);
+}
+
+.tooltip__type-text {
+    font-weight: 400;
+}
+
+.tooltip__link {
+    color: var(--white)
 }
 
 .client__actions {

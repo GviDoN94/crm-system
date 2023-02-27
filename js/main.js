@@ -154,23 +154,29 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function renderContacts(arr, parent) {
         arr.forEach(contact => {
-            let contactType = null;
+            let contactType = null,
+                contactTypeLink = '',
+                targetBlank = '_blank';
 
             switch (contact.type) {
                 case 'Телефон':
-                    contactType = 'client__contact-btn--phone';
+                    contactType = 'client__contact-link--phone';
+                    contactTypeLink = 'tel:';
+                    targetBlank = '';
                     break;
                 case 'Email':
-                    contactType = 'client__contact-btn--mail';
+                    contactType = 'client__contact-link--mail';
+                    contactTypeLink = 'mailto:';
+                    targetBlank = ' ';
                     break;
                 case 'Vk':
-                    contactType = 'client__contact-btn--vk';
+                    contactType = 'client__contact-link--vk';
                     break;
                 case 'Facebook':
-                    contactType = 'client__contact-btn--fb';
+                    contactType = 'client__contact-link--fb';
                     break;
                 case 'Другое':
-                    contactType = 'client__contact-btn--other';
+                    contactType = 'client__contact-link--other';
                     break;
 
                 default:
@@ -180,12 +186,37 @@ window.addEventListener('DOMContentLoaded', () => {
             const contactEl = createElement(
                 'li', parent, '', ['client__contact']
             ),
-                  contactBtn = createElement(
-                'button',
+                  contactLink = createElement(
+                'a',
                 contactEl,
                 '',
-                ['btn-reset', 'client__contact-btn', contactType]);
-            contactBtn.ariaLabel = `Тип контакта: ${contact.type}`;
+                ['link', 'client__contact-link', contactType]
+            ),
+                 contactTooltipLink = 
+                    `${contactTypeLink}https://${contact.value}`;
+            
+
+            contactLink.href = contactTooltipLink;
+            contactLink.ariaLabel = `Тип контакта: ${contact.type}`;
+            if (targetBlank) {
+                contactLink.target = targetBlank;
+                contactLink.rel = 'nofollow noopener noreferrer';
+            }
+
+            tippy(contactLink, {
+                content: `<span class='tooltip__type-text'>
+                                ${contact.type}:
+                          </span>
+                          <a class='link tooltip__link'
+                             href='${contactTooltipLink}'
+                             target='${targetBlank}'
+                             rel='nofollow noopener noreferrer'>
+                                ${contact.value}
+                          </a>`,
+                allowHTML: true,
+                theme: 'mine-shaft',
+                interactive: true,
+              });
         });
     }
 
