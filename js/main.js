@@ -94,8 +94,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 type="text"
                 placeholder="Введите данные контакта"
             >
-            <button
-                class="btn-reset contact__delete-btn"
+            <button class="btn-reset contact__delete-btn"
                 type="button"
                 aria-label="Удалить контакт"
             >
@@ -117,6 +116,13 @@ window.addEventListener('DOMContentLoaded', () => {
                 </svg>                                    
             </button>
         `;
+
+        tippy(contact.querySelector('.contact__delete-btn'), {
+            content: 'Удалить контакт',
+            theme: 'mine-shaft',
+            offset: [0, -1]
+        });
+
         new Choices(contact.querySelector('.contact__select'), {
             itemSelectText: '',
             searchEnabled: false,

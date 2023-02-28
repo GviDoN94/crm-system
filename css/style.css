@@ -392,6 +392,10 @@ html {
     border-right-color: var(--mine-shaft);
 }
 
+.tippy-content {
+    padding: 7px 12px;
+}
+
 .tooltip__type-text {
     font-weight: 400;
 }
