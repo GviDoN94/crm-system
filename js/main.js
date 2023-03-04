@@ -66,6 +66,34 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function formReset() {
+        const {
+            form,
+            contactsContainerForm,
+            addContactsForm,
+            addContactBtn,
+            errorsForm,
+            inputsForm
+        } = currentModalFormElements;
+
+        form.reset();
+        contactsContainerForm.innerHTML = '';
+        contactsContainerForm.classList.remove(
+            'modal-form__contacts-container--margin-bottom'
+        );
+        addContactsForm.classList.remove(
+            'modal-form__add-contacts--large-padding'
+        );
+        addContactBtn.classList.remove('hide');
+        errorsForm.innerHTML = '';
+        inputsForm.forEach(input => {
+            input.classList.remove('modal-form__input--error');
+            input.nextElementSibling.classList.remove(
+                'modal-form__placeholder--small'
+            );
+        });
+    }
+
     function openModal(path) {
         modalForms.forEach(form => {
             if (form.dataset.target === path) {
@@ -83,28 +111,10 @@ window.addEventListener('DOMContentLoaded', () => {
     function closeModal() {
         modal.classList.remove('is-open-modal');
         modalContent.classList.remove('modal-open', 'animate-open');
-        modalForms.forEach(form => {form.classList.remove('show')});
-    
-        // Don't forget!!!
-    
-        // modal.querySelectorAll('.modal-form__placeholder--small')
-        //      .forEach(placeholder =>
-        //          placeholder.classList.remove('modal-form__placeholder--small')
-        // );
-        
-        // formAdd.reset();
-        // contactsContainerFormAdd.innerHTML = '';
-        // addContactsFormAdd
-        //     .classList
-        //     .remove('modal-form__add-contacts--large-padding');
-        // contactsContainerFormAdd
-        //     .classList
-        //     .remove('modal-form__contacts-container--margin-bottom');
-        // addContactBtn.classList.remove('hide');
-        // errorsFormAdd.innerHTML = '';
-        // inputsFormAdd.forEach(input =>
-        //     input.classList.remove('modal-form__input--error')
-        // );
+        modalForms.forEach(form => form.classList.remove('show'));
+        if (currentModalFormElements) {
+            formReset();
+        }
     }
 
     function createContactInput (parent) {
