@@ -507,6 +507,11 @@ html {
     height: 100%;
 }
 
+.modal.is-open-modal {
+    opacity: 1;
+    visibility: visible;
+}
+
 .modal__content {
     position: relative;
     vertical-align: middle;
@@ -520,6 +525,15 @@ html {
     cursor: default;
     opacity: 0;
 	transform: scale(0);
+}
+
+.modal-open {
+    display: inline-flex;
+}
+
+.animate-open {
+	opacity: 1;
+	transform: scale(1);
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
@@ -534,9 +548,13 @@ html {
 }
 
 .modal-form {
-    display: flex;
+    display: none;
     flex-direction: column;
     width: 100%;
+}
+
+.modal-form.show {
+    display: flex;
 }
 
 .modal-form__inputs-wrap {
@@ -874,28 +892,16 @@ html {
 }
 
 .modal-delete__title {
+    margin: 0;
     margin-bottom: 11px;
 }
 
 .modal-delete__question {
+    align-self: center;
     margin: 0;
     margin-bottom: 25px;
     max-width: 275px;
     color: var(--mine-shaft);
     font-size: 14px;
     line-height: 19px;
-}
-
-.modal.is-open-modal {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-open {
-    display: inline-flex;
-}
-
-.animate-open {
-	opacity: 1;
-	transform: scale(1);
 }

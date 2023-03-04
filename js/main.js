@@ -46,37 +46,65 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function openModal(modal) {
-        const modalContent = modal.querySelector('.modal__content');
-        modal.classList.add('is-open-modal');
-        modalContent.classList.add('modal-open');
-        setTimeout(() => modalContent.classList.add('animate-open'), 300);
+    function getFormElements(form) {
+        if (form.dataset.target !== 'delete-client') {
+            currentModalFormElements = {
+                form: form,
+                inputsForm: form.querySelectorAll('.modal-form__input'),
+                addContactsForm: form.querySelector(
+                    '.modal-form__add-contacts'
+                ),
+                contactsContainerForm: form.querySelector(
+                    '.modal-form__contacts-container'
+                ),
+                addContactBtn: form.querySelector('.add-contact-btn'),
+                errorsForm: form.querySelector('.modal-form__errors-box'),
+                acceptFormBtn: form.querySelector('.accept-btn')
+            };
+        } else {
+            currentModalFormElements = null;
+        }
     }
 
-    function closeModal(modal) {
-        modal.classList.remove('is-open-modal');
-        modal.querySelector('.modal__content')
-             .classList.remove('modal-open', 'animate-open');
-        modal.querySelectorAll('.modal-form__placeholder--small')
-             .forEach(placeholder =>
-                 placeholder.classList.remove('modal-form__placeholder--small')
-        );
-
-        // Don't forget!!!
+    function openModal(path) {
+        modalForms.forEach(form => {
+            if (form.dataset.target === path) {
+                getFormElements(form);
+                form.classList.add('show');
+                modal.classList.add('is-open-modal');
+                modalContent.classList.add('modal-open');
+                setTimeout(() => modalContent.classList.add('animate-open'), 300);
+                return;
+            }
+        });
         
-        formAdd.reset();
-        contactsContainerFormAdd.innerHTML = '';
-        addContactsFormAdd
-            .classList
-            .remove('modal-form__add-contacts--large-padding');
-        contactsContainerFormAdd
-            .classList
-            .remove('modal-form__contacts-container--margin-bottom');
-        addContactBtn.classList.remove('hide');
-        errorsFormAdd.innerHTML = '';
-        inputsFormAdd.forEach(input =>
-            input.classList.remove('modal-form__input--error')
-        );
+    }
+
+    function closeModal() {
+        modal.classList.remove('is-open-modal');
+        modalContent.classList.remove('modal-open', 'animate-open');
+        modalForms.forEach(form => {form.classList.remove('show')});
+    
+        // Don't forget!!!
+    
+        // modal.querySelectorAll('.modal-form__placeholder--small')
+        //      .forEach(placeholder =>
+        //          placeholder.classList.remove('modal-form__placeholder--small')
+        // );
+        
+        // formAdd.reset();
+        // contactsContainerFormAdd.innerHTML = '';
+        // addContactsFormAdd
+        //     .classList
+        //     .remove('modal-form__add-contacts--large-padding');
+        // contactsContainerFormAdd
+        //     .classList
+        //     .remove('modal-form__contacts-container--margin-bottom');
+        // addContactBtn.classList.remove('hide');
+        // errorsFormAdd.innerHTML = '';
+        // inputsFormAdd.forEach(input =>
+        //     input.classList.remove('modal-form__input--error')
+        // );
     }
 
     function createContactInput (parent) {
@@ -129,32 +157,59 @@ window.addEventListener('DOMContentLoaded', () => {
             position: 'bottom',
             shouldSort: false,
         });
+
         setTimeout(() => contact.classList.add('animate-add'), 10);
-        contact.querySelector('.contact__delete-btn')
-               .addEventListener('click', () => {
-            contact.classList.remove('animate-add');
-            setTimeout(() => {
-                contact.remove();
-                const amountImputs = contactsContainerFormAdd
-                                        .querySelectorAll('.contact').length;
-                if (!amountImputs) {
-                    addContactsFormAdd.classList.remove(
-                        'modal-form__add-contacts--large-padding'
-                    );
-                    contactsContainerFormAdd
-                        .classList
-                        .remove(
+
+        const {addContactsForm, addContactBtn} = currentModalFormElements;
+
+        let amountImputs = parent.querySelectorAll('.contact').length;
+
+        if (!addContactsForm.classList.contains(
+                'modal-form__add-contacts--large-padding'
+            )) {
+            addContactsForm.classList.add(
+                'modal-form__add-contacts--large-padding'
+            );
+        }
+        
+        if (!parent.classList.contains(
+                'modal-form__contacts-container--margin-bottom'
+            )) {
+            parent.classList.add(
+                'modal-form__contacts-container--margin-bottom'
+            );
+        }
+
+        if (amountImputs >= 10) {
+            addContactBtn.classList.add('hide');
+            parent.classList.remove(
+                'modal-form__contacts-container--margin-bottom'
+            );
+        }
+
+        contact
+            .querySelector('.contact__delete-btn')
+            .addEventListener('click', () => {
+                contact.classList.remove('animate-add');
+                setTimeout(() => {
+                    contact.remove();
+                    amountImputs = parent.querySelectorAll('.contact').length;
+                    if (!amountImputs) {
+                        addContactsForm.classList.remove(
+                            'modal-form__add-contacts--large-padding'
+                        );
+                        parent.classList.remove(
                             'modal-form__contacts-container--margin-bottom'
                         );
-                }
-                if (amountImputs < 10 &&
-                    addContactBtn.classList.contains('hide')) {
-                    addContactBtn.classList.remove('hide');
-                    contactsContainerFormAdd
-                        .classList
-                        .add('modal-form__contacts-container--margin-bottom');
-                }
-            }, 350);
+                    }
+                    if (amountImputs < 10 &&
+                        addContactBtn.classList.contains('hide')) {
+                        addContactBtn.classList.remove('hide');
+                        parent.classList.add(
+                            'modal-form__contacts-container--margin-bottom'
+                        );
+                    }
+                }, 350);
         });
     }
 
@@ -192,13 +247,13 @@ window.addEventListener('DOMContentLoaded', () => {
             const contactEl = createElement(
                 'li', parent, '', ['client__contact']
             ),
-                  contactLink = createElement(
+                contactLink = createElement(
                 'a',
                 contactEl,
                 '',
                 ['link', 'client__contact-link', contactType]
             ),
-                 contactTooltipLink = 
+                contactTooltipLink = 
                     `${contactTypeLink}https://${contact.value}`;
             
 
@@ -210,20 +265,27 @@ window.addEventListener('DOMContentLoaded', () => {
             }
 
             tippy(contactLink, {
-                content: `<span class='tooltip__type-text'>
-                                ${contact.type}:
-                          </span>
-                          <a class='link tooltip__link'
-                             href='${contactTooltipLink}'
-                             target='${targetBlank}'
-                             rel='nofollow noopener noreferrer'>
-                                ${contact.value}
-                          </a>`,
+                content: 
+                    `<span class='tooltip__type-text'>
+                        ${contact.type}:
+                    </span>
+                    <a class='link tooltip__link'
+                        href='${contactTooltipLink}'
+                        target='${targetBlank}'
+                        rel='nofollow noopener noreferrer'>
+                        ${contact.value}
+                    </a>`,
                 allowHTML: true,
                 theme: 'mine-shaft',
                 interactive: true,
-              });
+            });
         });
+    }
+
+    function modalTrigger(parent, selector) {
+        parent.querySelector(selector).addEventListener('click', e =>
+            openModal(e.currentTarget.dataset.path)
+        );
     }
 
     function renderClient (obj, parent) {
@@ -243,14 +305,19 @@ window.addEventListener('DOMContentLoaded', () => {
                 <ul class="client__contacts-list"></ul>
             </td>
             <td class="table__client-cell client__actions">
-                <button class="client__change-btn btn-reset">Изменить</button>
-                <button class="client__delete-btn btn-reset">Удалить</button>
+                <button class="client__change-btn btn-reset"
+                        data-path="change-client">Изменить</button>
+                <button class="client__delete-btn btn-reset"
+                        data-path="delete-client">Удалить</button>
             </td>
         `;
         renderContacts(
             obj.contacts,
             client.querySelector('.client__contacts-list')
-        ); 
+        );
+
+        modalTrigger(client, '.client__change-btn');
+        modalTrigger(client, '.client__delete-btn');
     }
 
     async function getData(url) {
@@ -283,129 +350,107 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     const tBody = document.querySelector('.table__body'),
-          modalAdd = document.querySelector('#modal-add'),
-          formAdd = modalAdd.querySelector('.modal-form'),
-          inputsFormAdd = formAdd.querySelectorAll('.modal-form__input'),
-          addContactsFormAdd = formAdd.querySelector(
-            '.modal-form__add-contacts'
-          ),
-          contactsContainerFormAdd = formAdd.querySelector(
-              '.modal-form__contacts-container'
-          ),
-          addContactBtn = formAdd.querySelector('.add-contact-btn'),
-          errorsFormAdd = formAdd.querySelector('.modal-form__errors-box'),
-          acceptAddBtn = formAdd.querySelector('.accept-btn'),
-          modalChange = document.querySelector('#modal-change'),
-          modalDelete = document.querySelector('#modal-delete');
+        modal = document.querySelector('.modal'),
+        modalContent = modal.querySelector('.modal__content'),
+        modalForms = modalContent.querySelectorAll('.modal-form');
+        let currentModalFormElements = null;
 
-    document.querySelector('.add-client-btn').addEventListener('click', () => {
-        openModal(modalAdd);
-    });
+    modalTrigger(document, '.add-client-btn');
 
-    modalAdd.addEventListener('click', e => {
+    modal.addEventListener('click', e => {
         const event = e.target;
 
-        if (event === modalAdd ||
+        if (event === modal ||
             event.closest('.close-btn') ||
-            event.closest('.cansel-btn')) {
-            closeModal(modalAdd);
+            event.closest('.cansel-btn') ||
+            event.closest('.delete-btn')) {
+            closeModal();
         }
 
-        if (event.closest('.add-contact-btn')) {
-            if (!addContactsFormAdd.classList
-                    .contains('modal-form__add-contacts--large-padding')) {
-                addContactsFormAdd.classList.add(
-                    'modal-form__add-contacts--large-padding'
-                );
+        if (event.closest('.delete-btn')) {
+            openModal(event.dataset.path);
+        }
+    
+        if (currentModalFormElements) {
+            const {contactsContainerForm} = currentModalFormElements;
+    
+            if (event.closest('.add-contact-btn')) {
+                createContactInput(contactsContainerForm);
             }
-            if (!contactsContainerFormAdd.classList
-                    .contains('modal-form__contacts-container--margin-bottom')) {
-                contactsContainerFormAdd
-                    .classList
-                    .add('modal-form__contacts-container--margin-bottom');
-            }
-
-            createContactInput(contactsContainerFormAdd);
-
-            if (contactsContainerFormAdd
-                    .querySelectorAll('.contact').length >= 10) {
-                addContactBtn.classList.add('hide');
-                contactsContainerFormAdd
-                    .classList
-                    .remove('modal-form__contacts-container--margin-bottom');
+    
+            if (event.closest('.choices')) {
+                contactsContainerForm.querySelectorAll('.contact')
+                    .forEach(contact =>
+                        contact.classList.remove('contact--z-index'));
+                event.closest('.contact').classList.add('contact--z-index');
             }
         }
-
-        if (event.closest('.choices')) {
-            contactsContainerFormAdd.querySelectorAll('.contact')
-                .forEach(contact =>
-                    contact.classList.remove('contact--z-index'));
-            event.closest('.contact').classList.add('contact--z-index');
-        } 
     });
 
-    document.querySelectorAll('.modal-form__input').forEach(input => {
+    modalContent.querySelectorAll('.modal-form__input').forEach(input => {
         input.addEventListener('change', () => {
             if (input.value) {
-                input.nextElementSibling
-                     .classList.add('modal-form__placeholder--small');
+                input
+                    .nextElementSibling
+                    .classList.add('modal-form__placeholder--small');
             } else {
-                input.nextElementSibling
-                     .classList.remove('modal-form__placeholder--small');
+                input
+                    .nextElementSibling
+                    .classList.remove('modal-form__placeholder--small');
             }
         });
     });
 
-    formAdd.addEventListener('submit', e => {
-        e.preventDefault();
-        errorsFormAdd.innerHTML = '';
-        acceptAddBtn.classList.add('accept-btn--load');
-        acceptAddBtn.disabled = true;
+    // formAdd.addEventListener('submit', e => {
+    //     e.preventDefault();
+    //     errorsFormAdd.innerHTML = '';
+    //     acceptAddBtn.classList.add('accept-btn--load');
+    //     acceptAddBtn.disabled = true;
 
-        const formInputs = formAdd.querySelectorAll('.modal-form__input'),
-              formContacts = formAdd.querySelectorAll('.contact'),
-              newClient = {};
-              formInputs.forEach(input => {
-                  if (input.value.trim()) {
-                      newClient[input.name] =
-                          addCapitalLetter(input.value).trim();
-                  }
-              });
-        newClient.contacts = [];
-        formContacts.forEach(item => {
-            const selectEl = item.querySelector('.contact__select'),
-                  inputEl = item.querySelector('.contact__input'),
-                  contactObj = {
-                      type: selectEl.value,
-                      value: inputEl.value
-                  };
-            newClient.contacts.push(contactObj);
-        });
+    //     const formInputs = formAdd.querySelectorAll('.modal-form__input'),
+    //           formContacts = formAdd.querySelectorAll('.contact'),
+    //           newClient = {};
+    //           formInputs.forEach(input => {
+    //               if (input.value.trim()) {
+    //                   newClient[input.name] =
+    //                       addCapitalLetter(input.value).trim();
+    //               }
+    //           });
+    //     newClient.contacts = [];
+    //     formContacts.forEach(item => {
+    //         const selectEl = item.querySelector('.contact__select'),
+    //               inputEl = item.querySelector('.contact__input'),
+    //               contactObj = {
+    //                   type: selectEl.value,
+    //                   value: inputEl.value
+    //               };
+    //         newClient.contacts.push(contactObj);
+    //     });
 
-        postData('http://localhost:3500/api/clients', newClient)
-            .then((data) => {
-                if (data.errors) {
-                    data.errors.forEach(error => {
-                        createElement('span', errorsFormAdd, error.message);
-                        inputsFormAdd.forEach(input => {
-                            if (input.name === error.field) {
-                                input.classList.add('modal-form__input--error');
-                            }
-                        });
-                    });
-                } else {
-                    closeModal(modalAdd);
-                    renderTable(tBody);
-                }
-            })
-            .catch(() =>
-                createElement('span', errorsFormAdd, 'Что-то пошло не так')
-            )
-            .finally(() => {
-                acceptAddBtn.classList.remove('accept-btn--load');
-                acceptAddBtn.disabled = false;
-            });
-    });
+    //     postData('http://localhost:3500/api/clients', newClient)
+    //         .then((data) => {
+    //             if (data.errors) {
+    //                 data.errors.forEach(error => {
+    //                     createElement('span', errorsFormAdd, error.message);
+    //                     inputsFormAdd.forEach(input => {
+    //                         if (input.name === error.field) {
+    //                             input.classList.add('modal-form__input--error');
+    //                         }
+    //                     });
+    //                 });
+    //             } else {
+    //                 closeModal(modal);
+    //                 renderTable(tBody);
+    //             }
+    //         })
+    //         .catch(() =>
+    //             createElement('span', errorsFormAdd, 'Что-то пошло не так')
+    //         )
+    //         .finally(() => {
+    //             acceptAddBtn.classList.remove('accept-btn--load');
+    //             acceptAddBtn.disabled = false;
+    //         });
+    // });
 
     renderTable(tBody);
 });

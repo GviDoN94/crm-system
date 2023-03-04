@@ -66,7 +66,7 @@
                     </thead>
                     <tbody class="table__body"></tbody>
                 </table>
-                <button class="btn-reset add-client-btn" aria-label="Закрыть модальное окно">
+                <button class="btn-reset add-client-btn" data-path="add-client" aria-label="Закрыть модальное окно">
                     <svg class="add-client-btn__svg" width="23" height="16" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14.5 8C16.71 8 18.5 6.21 18.5 4C18.5 1.79 16.71 0 14.5 0C12.29 0 10.5 1.79 10.5 4C10.5 6.21 12.29 8 14.5 8ZM5.5 6V3H3.5V6H0.5V8H3.5V11H5.5V8H8.5V6H5.5ZM14.5 10C11.83 10 6.5 11.34 6.5 14V16H22.5V14C22.5 11.34 17.17 10 14.5 10Z"/>
                     </svg>
@@ -74,14 +74,14 @@
                 </button>
             </div>
         </section>
-        <div class="modal" id="modal-add">
+        <div class="modal">
             <div class="modal__content">
                 <button class="close-btn btn-reset" aria-label="Закрыть модальное окно">
                     <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
                     </svg>                        
                 </button>
-                <form class="modal-form">
+                <form class="modal-form" data-target="add-client">
                     <div class="modal-form__inputs-wrap">
                         <div class="modal-form__title-wrap">
                             <legend class="modal-form__title">Новый клиент</legend>
@@ -114,16 +114,7 @@
                     <button class="btn-reset accept-btn" type="submit">Сохранить</button>
                     <button class="btn-reset cansel-btn" type="button">Отмена</button>
                 </form>
-            </div>
-        </div>
-        <div class="modal" id="modal-change">
-            <div class="modal__content">
-                <button class="close-btn btn-reset" aria-label="Закрыть модальное окно">
-                    <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
-                    </svg>
-                </button>
-                <form class="modal-form">
+                <form class="modal-form" data-target="change-client">
                     <div class="modal-form__inputs-wrap">
                         <div class="modal-form__title-wrap">
                             <legend class="modal-form__title">Изменить данные</legend>
@@ -153,24 +144,15 @@
                         </button>
                     </div>
                     <div class="modal-form__errors-box"></div>
-                    <button class="btn-reset accept-btn" type="submit">
-                        <span class="accept-btn__text">Сохранить</span>
-                    </button>
-                    <button class="btn-reset cansel-btn" type="button">Удалить клиента</button>
+                    <button class="btn-reset accept-btn" type="submit">Сохранить</button>
+                    <button class="btn-reset delete-btn" type="button" data-path="delete-client">Удалить клиента</button>
                 </form>
-            </div>
-        </div>
-        <div class="modal" id="modal-delete">
-            <div class="modal__content">
-                <button class="close-btn btn-reset">
-                    <svg class="close-btn__svg" width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M16.2333 1.73333L15.2666 0.766664L8.49991 7.53336L1.73324 0.766696L0.766576 1.73336L7.53324 8.50003L0.766603 15.2667L1.73327 16.2333L8.49991 9.46669L15.2666 16.2334L16.2332 15.2667L9.46657 8.50003L16.2333 1.73333Z" fill="#B0B0B0"/>
-                    </svg>
-                </button>
-                <h2 class="modal-delete__title">Удалить клиента</h2>
-                <p class="modal-delete__question">Вы&nbsp;действительно хотите удалить данного клиента?</p>
-                <button class="btn-reset accept-btn">Удалить</button>
-                <button class="btn-reset cansel-btn" type="button">Отмена</button>
+                <form class="modal-form" data-target="delete-client">
+                    <h2 class="modal-delete__title">Удалить клиента</h2>
+                    <p class="modal-delete__question">Вы&nbsp;действительно хотите удалить данного клиента?</p>
+                    <button class="btn-reset accept-btn">Удалить</button>
+                    <button class="btn-reset cansel-btn" type="button">Отмена</button>
+                </form>
             </div>
         </div>
     </main>
