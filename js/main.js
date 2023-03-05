@@ -51,7 +51,10 @@ window.addEventListener('DOMContentLoaded', () => {
         const result = await fetch(url, {
             method: 'DELETE'
         });
-        return result;
+        if (!result.ok) {
+            throw new Error(`Could not fetch ${url}, status ${result.status}`);
+        }
+        return result.json();
     }
 
     function addCapitalLetter(value) {
@@ -83,9 +86,76 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function renderContacts(arr, parent) {
+        arr.forEach(contact => {
+            let contactType = null,
+                contactTypeLink = '',
+                targetBlank = '_blank';
+
+            switch (contact.type) {
+                case 'Телефон':
+                    contactType = 'client__contact-link--phone';
+                    contactTypeLink = 'tel:';
+                    targetBlank = '';
+                    break;
+                case 'Email':
+                    contactType = 'client__contact-link--mail';
+                    contactTypeLink = 'mailto:';
+                    targetBlank = ' ';
+                    break;
+                case 'Vk':
+                    contactType = 'client__contact-link--vk';
+                    break;
+                case 'Facebook':
+                    contactType = 'client__contact-link--fb';
+                    break;
+                case 'Другое':
+                    contactType = 'client__contact-link--other';
+                    break;
+
+                default:
+                    break;
+            }
+
+            const contactEl = createElement(
+                'li', parent, '', ['client__contact']
+            ),
+                contactLink = createElement(
+                'a',
+                contactEl,
+                '',
+                ['link', 'client__contact-link', contactType]
+            ),
+                contactTooltipLink = `${contactTypeLink}${contact.value}`;
+
+            contactLink.href = contactTooltipLink;
+            contactLink.ariaLabel = `Тип контакта: ${contact.type}`;
+            if (targetBlank) {
+                contactLink.target = targetBlank;
+                contactLink.rel = 'nofollow noopener noreferrer';
+            }
+
+            tippy(contactLink, {
+                content: 
+                    `<span class='tooltip__type-text'>
+                        ${contact.type}:
+                    </span>
+                    <a class='link tooltip__link'
+                        href='${contactTooltipLink}'
+                        target='${targetBlank}'
+                        rel='nofollow noopener noreferrer'>
+                        ${contact.value}
+                    </a>`,
+                allowHTML: true,
+                theme: 'mine-shaft',
+                interactive: true,
+            });
+        });
+    }
+
     function getFormElements(form) {
-        if (form.dataset.target !== 'delete-client') {
-            return {
+        currentModalFormElements = form.dataset.target !== 'delete-client' ?
+            {
                 form: form,
                 inputsForm: form.querySelectorAll('.modal-form__input'),
                 addContactsForm: form.querySelector(
@@ -97,10 +167,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 addContactBtn: form.querySelector('.add-contact-btn'),
                 errorsForm: form.querySelector('.modal-form__errors-box'),
                 acceptFormBtn: form.querySelector('.accept-btn')
-            };
-        } else {
-            return null;
-        }
+            } :
+            null;
     }
 
     function formReset() {
@@ -111,7 +179,7 @@ window.addEventListener('DOMContentLoaded', () => {
             addContactBtn,
             errorsForm,
             inputsForm
-        } = currentModalFormElements;
+            } = currentModalFormElements;
 
         form.reset();
         contactsContainerForm.innerHTML = '';
@@ -136,9 +204,9 @@ window.addEventListener('DOMContentLoaded', () => {
             inputsForm,
             contactsContainerForm,
             errorsForm
-        } = currentModalFormElements;
+            } = currentModalFormElements;
         
-        getData(`${uri}/${currentClientId}`)
+        getData(`${prefixUri}/${currentClientId}`)
             .then(data => {                
                 inputsForm.forEach(input => {
                     input.nextElementSibling.classList.add(
@@ -171,14 +239,17 @@ window.addEventListener('DOMContentLoaded', () => {
     function openModal(path) {
         modalForms.forEach(form => {
             if (form.dataset.target === path) {
-                currentModalFormElements = getFormElements(form);
+                getFormElements(form);
                 if (path === 'change-client') {
                     fillForm();
                 }
                 form.classList.add('show');
                 modal.classList.add('is-open-modal');
                 modalContent.classList.add('modal-open');
-                setTimeout(() => modalContent.classList.add('animate-open'), 300);
+                setTimeout(() =>
+                    modalContent.classList.add('animate-open'),
+                    300
+                );
                 return;
             }
         });
@@ -327,75 +398,6 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderContacts(arr, parent) {
-        arr.forEach(contact => {
-            let contactType = null,
-                contactTypeLink = '',
-                targetBlank = '_blank';
-
-            switch (contact.type) {
-                case 'Телефон':
-                    contactType = 'client__contact-link--phone';
-                    contactTypeLink = 'tel:';
-                    targetBlank = '';
-                    break;
-                case 'Email':
-                    contactType = 'client__contact-link--mail';
-                    contactTypeLink = 'mailto:';
-                    targetBlank = ' ';
-                    break;
-                case 'Vk':
-                    contactType = 'client__contact-link--vk';
-                    break;
-                case 'Facebook':
-                    contactType = 'client__contact-link--fb';
-                    break;
-                case 'Другое':
-                    contactType = 'client__contact-link--other';
-                    break;
-
-                default:
-                    break;
-            }
-
-            const contactEl = createElement(
-                'li', parent, '', ['client__contact']
-            ),
-                contactLink = createElement(
-                'a',
-                contactEl,
-                '',
-                ['link', 'client__contact-link', contactType]
-            ),
-                contactTooltipLink = 
-                    `${contactTypeLink}https://${contact.value}`;
-            
-
-            contactLink.href = contactTooltipLink;
-            contactLink.ariaLabel = `Тип контакта: ${contact.type}`;
-            if (targetBlank) {
-                contactLink.target = targetBlank;
-                contactLink.rel = 'nofollow noopener noreferrer';
-            }
-
-            tippy(contactLink, {
-                content: 
-                    `<span class='tooltip__type-text'>
-                        ${contact.type}:
-                    </span>
-                    <a class='link tooltip__link'
-                        href='${contactTooltipLink}'
-                        target='${targetBlank}'
-                        rel='nofollow noopener noreferrer'>
-                        ${contact.value}
-                    </a>`,
-                allowHTML: true,
-                theme: 'mine-shaft',
-                interactive: true,
-            });
-        });
-    }
-
     function modalTrigger(parent, selector, clientId = null) {
         parent.querySelector(selector).addEventListener('click', e => {
             currentClientId = clientId ? clientId : null;
@@ -439,7 +441,7 @@ window.addEventListener('DOMContentLoaded', () => {
         let clientsList = [];
         tBody.innerHTML = '';
 
-        getData(uri)
+        getData(prefixUri)
             .then(data => {
                 clientsList = [...data];
                 convertDataValues(clientsList);
@@ -448,7 +450,60 @@ window.addEventListener('DOMContentLoaded', () => {
             .catch(() => console.log('Что-то пошло не так'));
     }
 
-    const uri = 'http://localhost:3500/api/clients',
+    function processForm(hendler, uri) {
+        const {
+            contactsContainerForm,
+            errorsForm,
+            inputsForm,
+            acceptFormBtn
+            } = currentModalFormElements,
+            contactsForm = contactsContainerForm.querySelectorAll('.contact'),
+            clientObj = {};
+
+        inputsForm.forEach(input => {
+            let value = input.value.trim() ?
+                addCapitalLetter(input.value).trim() :
+                input.value;
+
+            clientObj[input.name] = value;
+        });
+        clientObj.contacts = [];
+        contactsForm.forEach(item => {
+            const selectEl = item.querySelector('.contact__select'),
+                inputEl = item.querySelector('.contact__input'),
+                contactObj = {
+                    type: selectEl.value,
+                    value: inputEl.value
+                };
+            clientObj.contacts.push(contactObj);
+        });
+
+        hendler(uri, clientObj)
+            .then((data) => {
+                if (data.errors) {
+                    data.errors.forEach(error => {
+                    createElement('span', errorsForm, error.message);
+                    inputsForm.forEach(input => {
+                    if (input.name === error.field) {
+                        input.classList.add('modal-form__input--error');
+                    }
+                    });
+                });
+                } else {
+                    closeModal();
+                    renderTable();
+                }
+            })
+            .catch(() =>
+                createElement('span', errorsForm, 'Что-то пошло не так')
+            )
+            .finally(() => {
+                acceptFormBtn.classList.remove('accept-btn--load');
+                acceptFormBtn.disabled = false;
+            });
+    }
+
+    const prefixUri = 'http://localhost:3500/api/clients',
         tBody = document.querySelector('.table__body'),
         modal = document.querySelector('.modal'),
         modalContent = modal.querySelector('.modal__content'),
@@ -507,61 +562,19 @@ window.addEventListener('DOMContentLoaded', () => {
         modalForm.addEventListener('submit', e => {
             e.preventDefault();
 
-            const {
-                contactsContainerForm,
-                errorsForm,
-                inputsForm,
-                acceptFormBtn
-            } = getFormElements(modalForm);
+            const {errorsForm, acceptFormBtn} = currentModalFormElements,
+                currentForm = modalForm.dataset.target;
 
             errorsForm.innerHTML = '';
             acceptFormBtn.classList.add('accept-btn--load');
             acceptFormBtn.disabled = true;
 
-            if (modalForm.dataset.target ==='add-client') {
-                const contactsForm = contactsContainerForm
-                    .querySelectorAll('.contact'),
-                    newClient = {};
-                    inputsForm.forEach(input => {
-                        if (input.value.trim()) {
-                            newClient[input.name] =
-                            addCapitalLetter(input.value).trim();
-                        }
-                    });
-                newClient.contacts = [];
-                contactsForm.forEach(item => {
-                    const selectEl = item.querySelector('.contact__select'),
-                        inputEl = item.querySelector('.contact__input'),
-                        contactObj = {
-                            type: selectEl.value,
-                            value: inputEl.value
-                        };
-                    newClient.contacts.push(contactObj);
-                });
+            if (currentForm ==='add-client') {
+                processForm(postData, prefixUri);
+            }
 
-                postData(uri, newClient)
-                    .then((data) => {
-                        if (data.errors) {
-                            data.errors.forEach(error => {
-                            createElement('span', errorsForm, error.message);
-                            inputsForm.forEach(input => {
-                            if (input.name === error.field) {
-                                input.classList.add('modal-form__input--error');
-                            }
-                            });
-                        });
-                        } else {
-                            closeModal();
-                            renderTable();
-                        }
-                    })
-                    .catch(() =>
-                        createElement('span', errorsForm, 'Что-то пошло не так')
-                    )
-                    .finally(() => {
-                        acceptFormBtn.classList.remove('accept-btn--load');
-                        acceptFormBtn.disabled = false;
-                    });
+            if (currentForm === 'change-client') {
+                processForm(changeData, `${prefixUri}/${currentClientId}`);
             }
         })
     );
