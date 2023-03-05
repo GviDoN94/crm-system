@@ -17,6 +17,43 @@ window.addEventListener('DOMContentLoaded', () => {
         return element;
     }
 
+    async function getData(url) {
+        const result = await fetch(url);
+        if (!result.ok) {
+            throw new Error(`Could not fetch ${url}, status ${result.status}`);
+        }
+        return result.json();
+    }
+
+    async function postData(url, data) {
+        const result = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        return await result.json();
+    }
+
+    async function changeData(url, obj) {
+        const result = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(obj)
+        });
+        return await result.json();
+    }
+
+    async function deleteData(url) {
+        const result = await fetch(url, {
+            method: 'DELETE'
+        });
+        return result;
+    }
+
     function addCapitalLetter(value) {
         return value[0].toUpperCase() + value.slice(1).toLowerCase();
     }
@@ -94,10 +131,50 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function fillForm() {
+        const {
+            inputsForm,
+            contactsContainerForm,
+            errorsForm
+        } = currentModalFormElements;
+        
+        getData(`${uri}/${currentClientId}`)
+            .then(data => {                
+                inputsForm.forEach(input => {
+                    input.nextElementSibling.classList.add(
+                        'modal-form__placeholder--small'
+                    );
+                    input.value = data[input.name];
+                });
+                
+                data.contacts.forEach(contact => {
+                    createContactInput(
+                        contactsContainerForm,
+                        contact.type,
+                        contact.value
+                    );
+                });
+            })
+            .catch(() => {
+                createElement(
+                    'span',
+                    errorsForm,
+                    'Клиент удален или ошибка сервера'
+                );
+                setTimeout(() => {
+                    closeModal();
+                    renderTable();
+                }, 5000);
+            });
+    }
+
     function openModal(path) {
         modalForms.forEach(form => {
             if (form.dataset.target === path) {
                 currentModalFormElements = getFormElements(form);
+                if (path === 'change-client') {
+                    fillForm();
+                }
                 form.classList.add('show');
                 modal.classList.add('is-open-modal');
                 modalContent.classList.add('modal-open');
@@ -117,19 +194,37 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function createContactInput (parent) {
-        const contact = createElement('div', parent, '', ['contact']);
+    function createContactInput (parent, type= '', value='') {
+        const options = [
+                {
+                    value: 'Телефон',
+                    label: 'Телефон',
+                },
+                {
+                    value: 'Email',
+                    label: 'Email',
+                },
+                {
+                    value: 'Vk',
+                    label: 'Vk',
+                },
+                {
+                    value: 'Facebook',
+                    label: 'Facebook',
+                },
+                {
+                    value: 'Другое',
+                    label: 'Другое',
+                }
+            ],
+            contact = createElement('div', parent, '', ['contact']);
+
         contact.innerHTML =`
-            <select class="contact__select">
-                <option value="Телефон">Телефон</option>
-                <option value="Email">Email</option>
-                <option value="Vk">Vk</option>
-                <option value="Facebook">Facebook</option>
-                <option value="Другое">Другое</option>
-            </select>
+            <select class="contact__select"></select>
             <input
                 class="contact__input"
                 type="text"
+                value="${value}"
                 placeholder="Введите данные контакта"
             >
             <button class="btn-reset contact__delete-btn"
@@ -161,11 +256,20 @@ window.addEventListener('DOMContentLoaded', () => {
             offset: [0, -1]
         });
 
+        if (type) {
+            options.forEach(option => {
+                if (option.value === type) {
+                    option.selected = true;
+                }
+            });
+        }
+
         new Choices(contact.querySelector('.contact__select'), {
             itemSelectText: '',
             searchEnabled: false,
             position: 'bottom',
             shouldSort: false,
+            choices: options
         });
 
         setTimeout(() => contact.classList.add('animate-add'), 10);
@@ -292,10 +396,11 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function modalTrigger(parent, selector) {
-        parent.querySelector(selector).addEventListener('click', e =>
-            openModal(e.currentTarget.dataset.path)
-        );
+    function modalTrigger(parent, selector, clientId = null) {
+        parent.querySelector(selector).addEventListener('click', e => {
+            currentClientId = clientId ? clientId : null;
+            openModal(e.currentTarget.dataset.path);
+        });
     }
 
     function renderClient (obj, parent) {
@@ -326,45 +431,31 @@ window.addEventListener('DOMContentLoaded', () => {
             client.querySelector('.client__contacts-list')
         );
 
-        modalTrigger(client, '.client__change-btn');
-        modalTrigger(client, '.client__delete-btn');
+        modalTrigger(client, '.client__change-btn', obj.id);
+        modalTrigger(client, '.client__delete-btn', obj.id);
     }
 
-    async function getData(url) {
-        const result = await fetch(url);
-        return result.json();
-    }
-
-    async function postData(url, data) {
-        const result = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        return await result.json();
-    }
-
-    function renderTable(parent) {
+    function renderTable() {
         let clientsList = [];
-        parent.innerHTML = '';
+        tBody.innerHTML = '';
 
-        getData('http://localhost:3500/api/clients')
+        getData(uri)
             .then(data => {
                 clientsList = [...data];
                 convertDataValues(clientsList);
-                clientsList.forEach(client => renderClient(client, parent));
+                clientsList.forEach(client => renderClient(client, tBody));
             })
             .catch(() => console.log('Что-то пошло не так'));
     }
 
-    const tBody = document.querySelector('.table__body'),
+    const uri = 'http://localhost:3500/api/clients',
+        tBody = document.querySelector('.table__body'),
         modal = document.querySelector('.modal'),
         modalContent = modal.querySelector('.modal__content'),
         modalForms = modalContent.querySelectorAll('.modal-form');
 
-    let currentModalFormElements = null;
+    let currentModalFormElements = null,
+        currentClientId = null;
 
     modalTrigger(document, '.add-client-btn');
 
@@ -448,7 +539,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     newClient.contacts.push(contactObj);
                 });
 
-                postData('http://localhost:3500/api/clients', newClient)
+                postData(uri, newClient)
                     .then((data) => {
                         if (data.errors) {
                             data.errors.forEach(error => {
@@ -461,7 +552,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         });
                         } else {
                             closeModal();
-                            renderTable(tBody);
+                            renderTable();
                         }
                     })
                     .catch(() =>
@@ -475,5 +566,5 @@ window.addEventListener('DOMContentLoaded', () => {
         })
     );
     
-    renderTable(tBody);
+    renderTable();
 });
