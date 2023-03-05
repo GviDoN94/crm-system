@@ -118,7 +118,7 @@ function createClient(data) {
  */
 function getClient(itemId) {
   const client = getClientList().find(({ id }) => id === itemId);
-  if (!client) throw new ApiError(404, { message: 'Client Not Found' });
+  if (!client) throw new ApiError(404, { message: 'Клиента не сущетсвует или он был удален' });
   return client;
 }
 
@@ -133,7 +133,7 @@ function getClient(itemId) {
 function updateClient(itemId, data) {
   const clients = getClientList();
   const itemIndex = clients.findIndex(({ id }) => id === itemId);
-  if (itemIndex === -1) throw new ApiError(404, { message: 'Client Not Found' });
+  if (itemIndex === -1) throw new ApiError(404, { message: 'Клиента не сущетсвует или он был удален' });
   Object.assign(clients[itemIndex], makeClientFromData({ ...clients[itemIndex], ...data }));
   clients[itemIndex].updatedAt = new Date().toISOString();
   writeFileSync(DB_FILE, JSON.stringify(clients), { encoding: 'utf8' });
@@ -148,7 +148,7 @@ function updateClient(itemId, data) {
 function deleteClient(itemId) {
   const clients = getClientList();
   const itemIndex = clients.findIndex(({ id }) => id === itemId);
-  if (itemIndex === -1) throw new ApiError(404, { message: 'Client Not Found' });
+  if (itemIndex === -1) throw new ApiError(404, { message: 'Клиента не сущетсвует или он был удален' });
   clients.splice(itemIndex, 1);
   writeFileSync(DB_FILE, JSON.stringify(clients), { encoding: 'utf8' });
   return {};

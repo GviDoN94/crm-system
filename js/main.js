@@ -48,7 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function getFormElements(form) {
         if (form.dataset.target !== 'delete-client') {
-            currentModalFormElements = {
+            return {
                 form: form,
                 inputsForm: form.querySelectorAll('.modal-form__input'),
                 addContactsForm: form.querySelector(
@@ -62,7 +62,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 acceptFormBtn: form.querySelector('.accept-btn')
             };
         } else {
-            currentModalFormElements = null;
+            return null;
         }
     }
 
@@ -97,7 +97,7 @@ window.addEventListener('DOMContentLoaded', () => {
     function openModal(path) {
         modalForms.forEach(form => {
             if (form.dataset.target === path) {
-                getFormElements(form);
+                currentModalFormElements = getFormElements(form);
                 form.classList.add('show');
                 modal.classList.add('is-open-modal');
                 modalContent.classList.add('modal-open');
@@ -363,7 +363,8 @@ window.addEventListener('DOMContentLoaded', () => {
         modal = document.querySelector('.modal'),
         modalContent = modal.querySelector('.modal__content'),
         modalForms = modalContent.querySelectorAll('.modal-form');
-        let currentModalFormElements = null;
+
+    let currentModalFormElements = null;
 
     modalTrigger(document, '.add-client-btn');
 
@@ -397,7 +398,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    modalContent.querySelectorAll('.modal-form__input').forEach(input => {
+    modalContent.querySelectorAll('.modal-form__input').forEach(input =>
         input.addEventListener('change', () => {
             if (input.value) {
                 input
@@ -408,59 +409,71 @@ window.addEventListener('DOMContentLoaded', () => {
                     .nextElementSibling
                     .classList.remove('modal-form__placeholder--small');
             }
-        });
-    });
+        })
+    );
 
-    // formAdd.addEventListener('submit', e => {
-    //     e.preventDefault();
-    //     errorsFormAdd.innerHTML = '';
-    //     acceptAddBtn.classList.add('accept-btn--load');
-    //     acceptAddBtn.disabled = true;
+    modalForms.forEach(modalForm => 
+        modalForm.addEventListener('submit', e => {
+            e.preventDefault();
 
-    //     const formInputs = formAdd.querySelectorAll('.modal-form__input'),
-    //           formContacts = formAdd.querySelectorAll('.contact'),
-    //           newClient = {};
-    //           formInputs.forEach(input => {
-    //               if (input.value.trim()) {
-    //                   newClient[input.name] =
-    //                       addCapitalLetter(input.value).trim();
-    //               }
-    //           });
-    //     newClient.contacts = [];
-    //     formContacts.forEach(item => {
-    //         const selectEl = item.querySelector('.contact__select'),
-    //               inputEl = item.querySelector('.contact__input'),
-    //               contactObj = {
-    //                   type: selectEl.value,
-    //                   value: inputEl.value
-    //               };
-    //         newClient.contacts.push(contactObj);
-    //     });
+            const {
+                contactsContainerForm,
+                errorsForm,
+                inputsForm,
+                acceptFormBtn
+            } = getFormElements(modalForm);
 
-    //     postData('http://localhost:3500/api/clients', newClient)
-    //         .then((data) => {
-    //             if (data.errors) {
-    //                 data.errors.forEach(error => {
-    //                     createElement('span', errorsFormAdd, error.message);
-    //                     inputsFormAdd.forEach(input => {
-    //                         if (input.name === error.field) {
-    //                             input.classList.add('modal-form__input--error');
-    //                         }
-    //                     });
-    //                 });
-    //             } else {
-    //                 closeModal(modal);
-    //                 renderTable(tBody);
-    //             }
-    //         })
-    //         .catch(() =>
-    //             createElement('span', errorsFormAdd, 'Что-то пошло не так')
-    //         )
-    //         .finally(() => {
-    //             acceptAddBtn.classList.remove('accept-btn--load');
-    //             acceptAddBtn.disabled = false;
-    //         });
-    // });
+            errorsForm.innerHTML = '';
+            acceptFormBtn.classList.add('accept-btn--load');
+            acceptFormBtn.disabled = true;
 
+            if (modalForm.dataset.target ==='add-client') {
+                const contactsForm = contactsContainerForm
+                    .querySelectorAll('.contact'),
+                    newClient = {};
+                    inputsForm.forEach(input => {
+                        if (input.value.trim()) {
+                            newClient[input.name] =
+                            addCapitalLetter(input.value).trim();
+                        }
+                    });
+                newClient.contacts = [];
+                contactsForm.forEach(item => {
+                    const selectEl = item.querySelector('.contact__select'),
+                        inputEl = item.querySelector('.contact__input'),
+                        contactObj = {
+                            type: selectEl.value,
+                            value: inputEl.value
+                        };
+                    newClient.contacts.push(contactObj);
+                });
+
+                postData('http://localhost:3500/api/clients', newClient)
+                    .then((data) => {
+                        if (data.errors) {
+                            data.errors.forEach(error => {
+                            createElement('span', errorsForm, error.message);
+                            inputsForm.forEach(input => {
+                            if (input.name === error.field) {
+                                input.classList.add('modal-form__input--error');
+                            }
+                            });
+                        });
+                        } else {
+                            closeModal();
+                            renderTable(tBody);
+                        }
+                    })
+                    .catch(() =>
+                        createElement('span', errorsForm, 'Что-то пошло не так')
+                    )
+                    .finally(() => {
+                        acceptFormBtn.classList.remove('accept-btn--load');
+                        acceptFormBtn.disabled = false;
+                    });
+            }
+        })
+    );
+    
     renderTable(tBody);
 });
