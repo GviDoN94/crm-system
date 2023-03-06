@@ -612,6 +612,12 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         })
     );
+
+    document.addEventListener('keydown', e => {
+        if (e.code === 'Escape' && modal.classList.contains('is-open-modal')) {
+            closeModal();
+        }
+    });
     
     modalTrigger(document, '.add-client-btn');
     renderTable();
