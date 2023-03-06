@@ -266,6 +266,16 @@ html {
     font-size: 0;
 }
 
+.table__cell-error {
+    text-align: center;
+    padding: 10px;
+    height: 60px;
+    color: #F06A4D;
+    font-size: 14px;
+    line-height: 19px;
+
+}
+
 .table__head-cell:first-child,
 .table__client-cell:first-child  {
     padding-left: 20px;
@@ -899,7 +909,6 @@ html {
 .modal-delete__question {
     align-self: center;
     margin: 0;
-    margin-bottom: 25px;
     max-width: 275px;
     color: var(--mine-shaft);
     font-size: 14px;

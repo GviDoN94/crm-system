@@ -168,7 +168,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 errorsForm: form.querySelector('.modal-form__errors-box'),
                 acceptFormBtn: form.querySelector('.accept-btn')
             } :
-            null;
+            {
+                form: form,
+                errorsForm: form.querySelector('.modal-form__errors-box'),
+                acceptFormBtn: form.querySelector('.accept-btn')
+            };
     }
 
     function formReset() {
@@ -181,22 +185,25 @@ window.addEventListener('DOMContentLoaded', () => {
             inputsForm
             } = currentModalFormElements;
 
-        form.reset();
-        contactsContainerForm.innerHTML = '';
-        contactsContainerForm.classList.remove(
-            'modal-form__contacts-container--margin-bottom'
-        );
-        addContactsForm.classList.remove(
-            'modal-form__add-contacts--large-padding'
-        );
-        addContactBtn.classList.remove('hide');
         errorsForm.innerHTML = '';
-        inputsForm.forEach(input => {
-            input.classList.remove('modal-form__input--error');
-            input.nextElementSibling.classList.remove(
-                'modal-form__placeholder--small'
+
+        if (form.dataset.target !== 'delete-client') {
+            form.reset();
+            contactsContainerForm.innerHTML = '';
+            contactsContainerForm.classList.remove(
+                'modal-form__contacts-container--margin-bottom'
             );
-        });
+            addContactsForm.classList.remove(
+                'modal-form__add-contacts--large-padding'
+            );
+            addContactBtn.classList.remove('hide');
+            inputsForm.forEach(input => {
+                input.classList.remove('modal-form__input--error');
+                input.nextElementSibling.classList.remove(
+                    'modal-form__placeholder--small'
+                );
+            });
+        }
     }
 
     function fillForm() {
@@ -232,7 +239,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     closeModal();
                     renderTable();
-                }, 5000);
+                }, 3000);
             });
     }
 
@@ -260,9 +267,7 @@ window.addEventListener('DOMContentLoaded', () => {
         modal.classList.remove('is-open-modal');
         modalContent.classList.remove('modal-open', 'animate-open');
         modalForms.forEach(form => form.classList.remove('show'));
-        if (currentModalFormElements) {
-            formReset();
-        }
+        formReset();
     }
 
     function createContactInput (parent, type= '', value='') {
@@ -447,7 +452,15 @@ window.addEventListener('DOMContentLoaded', () => {
                 convertDataValues(clientsList);
                 clientsList.forEach(client => renderClient(client, tBody));
             })
-            .catch(() => console.log('Что-то пошло не так'));
+            .catch(() => {
+                const tr = createElement('tr', tBody);
+                tr.innerHTML =
+                    `
+                    <td class="table__cell-error" colspan='6'>
+                        Не удалось загрузить данные...
+                    </td>
+                    `;
+            });
     }
 
     function processForm(hendler, uri) {
@@ -512,8 +525,6 @@ window.addEventListener('DOMContentLoaded', () => {
     let currentModalFormElements = null,
         currentClientId = null;
 
-    modalTrigger(document, '.add-client-btn');
-
     modal.addEventListener('click', e => {
         const event = e.target;
 
@@ -576,8 +587,32 @@ window.addEventListener('DOMContentLoaded', () => {
             if (currentForm === 'change-client') {
                 processForm(changeData, `${prefixUri}/${currentClientId}`);
             }
+
+            if (currentForm === 'delete-client') {
+                deleteData(`${prefixUri}/${currentClientId}`)
+                    .then(() => {
+                        closeModal();
+                        renderTable();
+                    })
+                    .catch(() =>{
+                        createElement(
+                            'span',
+                            errorsForm,
+                            'Клиент удален или ошибка сервера'
+                        );
+                        setTimeout(() => {
+                            closeModal();
+                            renderTable();
+                        }, 3000);
+                    })
+                    .finally(() => {
+                        acceptFormBtn.classList.remove('accept-btn--load');
+                        acceptFormBtn.disabled = false;
+                    });
+            }
         })
     );
     
+    modalTrigger(document, '.add-client-btn');
     renderTable();
 });
