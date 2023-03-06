@@ -79,6 +79,7 @@ window.addEventListener('DOMContentLoaded', () => {
     function convertDataValues(arr) {
         arr.forEach(item => {
             addFullName(item);
+            item.id = +item.id;
             item.createdAt = convertToDateObj(item.createdAt);
             item.updatedAt = convertToDateObj(item.updatedAt);
             item.created = getDateAndTime(item.createdAt);
@@ -450,6 +451,13 @@ window.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 clientsList = [...data];
                 convertDataValues(clientsList);
+                clientsList = clientsList.sort((a, b) => {
+                    const columnName = sortDirection.currentColumn,
+                        direction = sortDirection.direction ?
+                            a[columnName] < b[columnName] :
+                            a[columnName] > b[columnName];
+                    return direction ? -1 : 1;
+                });
                 clientsList.forEach(client => renderClient(client, tBody));
             })
             .catch(() => {
@@ -518,9 +526,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const prefixUri = 'http://localhost:3500/api/clients',
         tBody = document.querySelector('.table__body'),
+        tHead = document.querySelector('.table__head'),
+        columnNames = tHead.querySelectorAll('[data-column-name]'),
         modal = document.querySelector('.modal'),
         modalContent = modal.querySelector('.modal__content'),
-        modalForms = modalContent.querySelectorAll('.modal-form');
+        modalForms = modalContent.querySelectorAll('.modal-form'),
+        sortDirection = {
+            currentColumn: 'id',
+            direction: true 
+        };
 
     let currentModalFormElements = null,
         currentClientId = null;
@@ -616,6 +630,26 @@ window.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', e => {
         if (e.code === 'Escape' && modal.classList.contains('is-open-modal')) {
             closeModal();
+        }
+    });
+
+    tHead.addEventListener('mousedown', e => e.preventDefault());
+    tHead.addEventListener('click', e => {
+        if (e.target.closest('[data-column-name]')) {
+            const currentColumn = e.target.dataset.columnName;
+            if (sortDirection.currentColumn !== currentColumn) {
+                sortDirection.currentColumn = currentColumn;
+                sortDirection.direction = true;
+                columnNames.forEach(item =>
+                    item.classList.remove('table__head-text--up-arrow')
+                );
+                e.target.classList.add('table__head-text--up-arrow');
+                renderTable();
+            } else {
+                sortDirection.direction = !sortDirection.direction;
+                e.target.classList.toggle('table__head-text--up-arrow');
+                renderTable();
+            }
         }
     });
     

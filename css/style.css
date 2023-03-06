@@ -202,6 +202,7 @@ html {
     vertical-align: bottom;
     padding: 8px 0;
     padding-right: 10px;
+    cursor: default;
 }
 
 .table__head-text {
@@ -252,6 +253,13 @@ html {
     font-size: 10px;
     line-height: 14px;
     color: var(--purpule);
+}
+
+.table__id .table__head-text.table__head-text--up-arrow::before,
+.table__name .table__head-text.table__head-text--up-arrow::before,
+.table__creation-date .table__head-text.table__head-text--up-arrow::before,
+.table__last-change .table__head-text.table__head-text--up-arrow::before {
+    transform: translateY(-45%) rotate(0);
 }
 
 .client {
