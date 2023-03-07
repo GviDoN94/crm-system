@@ -149,6 +149,36 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function renderTable(serchRequest = '') {
+    const uri = serchRequest ?
+                `${prefixUri}?search=${serchRequest}` :
+                prefixUri;
+    let clientsList = [];
+    tBody.innerHTML = '';
+
+    getData(uri)
+      .then(data => {
+        clientsList = [...data];
+        convertDataValues(clientsList);
+        clientsList = clientsList.sort((a, b) => {
+          const columnName = sortDirection.currentColumn,
+            direction = sortDirection.direction ?
+              a[columnName] < b[columnName] :
+              a[columnName] > b[columnName];
+          return direction ? -1 : 1;
+        });
+        clientsList.forEach(client => renderClient(client, tBody));
+      })
+      .catch(() => {
+        const tr = createElement('tr', tBody);
+        tr.innerHTML =`
+          <td class="table__cell-error" colspan='6'>
+            Не удалось загрузить данные...
+          </td>
+        `;
+      });
+  }
+
   function getFormElements(form) {
     currentModalFormElements = form.dataset.target !== 'delete-client' ?
       {
@@ -428,33 +458,6 @@ window.addEventListener('DOMContentLoaded', () => {
     modalTrigger(client, '.client__delete-btn', obj.id);
   }
 
-  function renderTable() {
-    let clientsList = [];
-    tBody.innerHTML = '';
-
-    getData(prefixUri)
-      .then(data => {
-        clientsList = [...data];
-        convertDataValues(clientsList);
-        clientsList = clientsList.sort((a, b) => {
-          const columnName = sortDirection.currentColumn,
-            direction = sortDirection.direction ?
-              a[columnName] < b[columnName] :
-              a[columnName] > b[columnName];
-          return direction ? -1 : 1;
-        });
-        clientsList.forEach(client => renderClient(client, tBody));
-      })
-      .catch(() => {
-        const tr = createElement('tr', tBody);
-        tr.innerHTML =`
-          <td class="table__cell-error" colspan='6'>
-            Не удалось загрузить данные...
-          </td>
-        `;
-      });
-  }
-
   function processForm(hendler, uri) {
     const {
       contactsContainerForm,
@@ -509,6 +512,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   const prefixUri = 'http://localhost:3500/api/clients',
+        searchInput = document.querySelector('.search__input'),
         tBody = document.querySelector('.table__body'),
         tHead = document.querySelector('.table__head'),
         columnNames = tHead.querySelectorAll('[data-column-name]'),
@@ -521,7 +525,8 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
   let currentModalFormElements = null,
-      currentClientId = null;
+      currentClientId = null,
+      searchTimer = null;
 
   modal.addEventListener('click', e => {
     const event = e.target;
@@ -635,6 +640,13 @@ window.addEventListener('DOMContentLoaded', () => {
         renderTable();
       }
     }
+  });
+
+  searchInput.addEventListener('input', () => {
+    clearInterval(searchTimer);
+    searchTimer = setTimeout(() => {
+      renderTable(searchInput.value.trim());
+    }, 300);
   });
 
   modalTrigger(document, '.add-client-btn');

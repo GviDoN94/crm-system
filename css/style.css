@@ -45,7 +45,7 @@
     .client__change-btn:hover:not(.focus-visible) {
         color: var(--purpule);
     }
-    
+
     .client__delete-btn:hover:not(.focus-visible) {
         color: var(--red);
     }
@@ -59,7 +59,7 @@
     .add-contact-btn:hover:not(.focus-visible) .add-contact-btn__text {
         color: var(--purpule);
     }
-    
+
     .add-contact-btn:hover:not(.focus-visible) .add-contact-btn__text::before {
         background-image: url('../img/add-contact-focus.svg')
     }
@@ -108,7 +108,7 @@ html {
 .container {
     max-width: 1366px;
     margin: 0 auto;
-    padding: 0 90px;
+    padding: 0 20px;
 }
 
 .visually-hidden {
@@ -336,7 +336,6 @@ html {
 
 .client__contact {
     display: inline-block;
-    margin-bottom: 7px;
     margin-right: 7px;
 
 }
@@ -346,7 +345,7 @@ html {
 }
 
 .client__contact:nth-child(n+6) {
-    margin-bottom: 0;
+    margin-top: 7px;
 }
 
 .client__contact-link {
