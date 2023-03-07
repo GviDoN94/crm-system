@@ -599,6 +599,7 @@ html {
     color: var(--silver-chalice);
     font-size: 12px;
     line-height: 16px;
+    transform: translateY(2px);
 }
 
 .modal-form__input-wrap {
