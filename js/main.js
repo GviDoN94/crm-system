@@ -101,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
       case 'Email':
         contactType = 'client__contact-link--mail';
         contactTypeLink = 'mailto:';
-        targetBlank = ' ';
+        targetBlank = '';
         break;
       case 'Vk':
         contactType = 'client__contact-link--vk';
@@ -169,7 +169,46 @@ window.addEventListener('DOMContentLoaded', () => {
         renderContact(contact, parent);
       });
     }
-}
+  }
+
+  function modalTrigger(parent, selector, clientId = null) {
+    parent.querySelector(selector).addEventListener('click', e => {
+      currentClientId = clientId ? clientId : null;
+      openModal(e.currentTarget.dataset.path);
+    });
+  }
+
+  function renderClient (obj, parent) {
+    const client = createElement('tr', parent, '', ['client']);
+    client.innerHTML =`
+      <td class="table__client-cell client__id">${obj.id}</td>
+      <td class="table__client-cell client__name">${obj.fullName}</td>
+      <td class="table__client-cell client__creation">
+        <span class="client__creation-date">${obj.created.date}</span>
+        <span class="client__creation-time">${obj.created.time}</span>
+      </td>
+      <td class="table__client-cell client__change">
+        <span class="client__change-date">${obj.updated.date}</span>
+        <span class="client__change-time">${obj.updated.time}</span>
+      </td>
+      <td class="table__client-cell client__contacts">
+          <ul class="client__contacts-list"></ul>
+      </td>
+      <td class="table__client-cell client__actions">
+        <button class="client__change-btn btn-reset"
+                data-path="change-client">Изменить</button>
+        <button class="client__delete-btn btn-reset"
+                data-path="delete-client">Удалить</button>
+      </td>
+    `;
+    renderContacts(
+      obj.contacts,
+      client.querySelector('.client__contacts-list')
+    );
+
+    modalTrigger(client, '.client__change-btn', obj.id);
+    modalTrigger(client, '.client__delete-btn', obj.id);
+  }
 
   function renderTable(serchRequest = '') {
     const uri = serchRequest ?
@@ -247,6 +286,7 @@ window.addEventListener('DOMContentLoaded', () => {
       inputsForm
     } = currentModalFormElements;
 
+    window.location.href = window.location.href.split('#')[0];
     errorsForm.innerHTML = '';
 
     if (form.dataset.target !== 'delete-client') {
@@ -285,6 +325,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     getData(`${prefixUri}/${currentClientId}`)
       .then(data => {
+        window.location.hash = data.id;
         clientId.textContent = `ID: ${data.id}`;
 
         inputsForm.forEach(input => {
@@ -463,45 +504,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function modalTrigger(parent, selector, clientId = null) {
-    parent.querySelector(selector).addEventListener('click', e => {
-      currentClientId = clientId ? clientId : null;
-      openModal(e.currentTarget.dataset.path);
-    });
-  }
-
-  function renderClient (obj, parent) {
-    const client = createElement('tr', parent, '', ['client']);
-    client.innerHTML =`
-      <td class="table__client-cell client__id">${obj.id}</td>
-      <td class="table__client-cell client__name">${obj.fullName}</td>
-      <td class="table__client-cell client__creation">
-        <span class="client__creation-date">${obj.created.date}</span>
-        <span class="client__creation-time">${obj.created.time}</span>
-      </td>
-      <td class="table__client-cell client__change">
-        <span class="client__change-date">${obj.updated.date}</span>
-        <span class="client__change-time">${obj.updated.time}</span>
-      </td>
-      <td class="table__client-cell client__contacts">
-          <ul class="client__contacts-list"></ul>
-      </td>
-      <td class="table__client-cell client__actions">
-        <button class="client__change-btn btn-reset"
-                data-path="change-client">Изменить</button>
-        <button class="client__delete-btn btn-reset"
-                data-path="delete-client">Удалить</button>
-      </td>
-    `;
-    renderContacts(
-      obj.contacts,
-      client.querySelector('.client__contacts-list')
-    );
-
-    modalTrigger(client, '.client__change-btn', obj.id);
-    modalTrigger(client, '.client__delete-btn', obj.id);
-  }
-
   function processForm(hendler, uri) {
     const {
       form,
@@ -574,7 +576,7 @@ window.addEventListener('DOMContentLoaded', () => {
         };
 
   let currentModalFormElements = null,
-      currentClientId = null,
+      currentClientId = window.location.hash.slice(1),
       searchTimer = null;
 
   modal.addEventListener('click', e => {
@@ -702,4 +704,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   modalTrigger(document, '.add-client-btn');
   renderTable();
+
+  if (currentClientId) {
+    openModal('change-client');
+  }
 });
