@@ -1,0 +1,53 @@
+@media (max-width: 1200px) {
+    .table__id {
+        width: 138px;
+    }
+
+    .table__creation-date,
+    .table__last-change {
+        width: 146px;
+    }
+
+    .table__contacts {
+        width: 150px;
+    }
+
+    .table__creation-date .table__head-text,
+    .table__last-change .table__head-text {
+      display: inline-block;
+      max-width: 82px;
+      padding: 0;
+    }
+
+    .table__creation-date .table__head-text::before,
+    .table__last-change .table__head-text::before {
+      right: 17px;
+      width: 8px;
+      height: 8px;
+      transform: translateY(55%) rotate(180deg);
+    }
+
+    .table__last-change .table__head-text::before {
+      right: 6px;
+    }
+
+    .table__creation-date .table__head-text.table__head-text--up-arrow::before,
+    .table__last-change .table__head-text.table__head-text--up-arrow::before {
+        transform: translateY(55%) rotate(0);
+    }
+}
+
+@media (max-width: 1090px) {
+    .table__id {
+        width: 128px;
+    }
+
+    .table__creation-date,
+    .table__last-change {
+        width: 131px;
+    }
+
+    .table__contacts {
+      width: 130px;
+    }
+}

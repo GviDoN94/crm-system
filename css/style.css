@@ -235,6 +235,26 @@ html {
     background-image: url('../img/arrow.svg');
 }
 
+.table__id {
+    width: 150px;
+}
+
+.table__creation-date {
+    width: 175px;
+}
+
+.table__last-change {
+    width: 175px;
+}
+
+.table__contacts {
+    width: 160px;
+}
+
+.table__actions {
+    width: 206px;
+}
+
 .table__name .table__head-text {
     padding-right: 29px;
 }
@@ -432,7 +452,7 @@ html {
 }
 
 .client__actions {
-    width: 217px;
+    width: 206px;
 }
 
 .client__change-btn,
