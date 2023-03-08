@@ -155,6 +155,19 @@ window.addEventListener('DOMContentLoaded', () => {
                 prefixUri;
     let clientsList = [];
     tBody.innerHTML = '';
+    const trLoading = createElement('tr', tBody);
+    trLoading.innerHTML =`
+      <td class="loading" colspan='6'>
+        <svg class="spinner" width="80" height="80" viewBox="0 0 80 80" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.00025 40.0005C4.00025 59.8825 20.1182 76.0005 40.0002
+            76.0005C59.8822 76.0005 76.0002 59.8825 76.0002 40.0005C76.0002
+            20.1185 59.8823 4.00049 40.0003 4.00049C35.3513 4.00048 30.9082
+            4.88148 26.8282 6.48648" stroke="#9873FF" stroke-width="8"
+            stroke-miterlimit="10" stroke-linecap="round"/>
+        </svg>
+      </td>
+    `;
 
     getData(uri)
       .then(data => {
@@ -176,7 +189,8 @@ window.addEventListener('DOMContentLoaded', () => {
             Не удалось загрузить данные...
           </td>
         `;
-      });
+      })
+      .finally(() => trLoading.remove());
   }
 
   function getFormElements(form) {
@@ -512,7 +526,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   const prefixUri = 'http://localhost:3500/api/clients',
-        searchInput = document.querySelector('.search__input'),
+        searchForm = document.querySelector('.search'),
+        searchInput = searchForm.querySelector('.search__input'),
         tBody = document.querySelector('.table__body'),
         tHead = document.querySelector('.table__head'),
         columnNames = tHead.querySelectorAll('[data-column-name]'),
@@ -641,6 +656,8 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  searchForm.addEventListener('submit', e => e.preventDefault());
 
   searchInput.addEventListener('input', () => {
     clearInterval(searchTimer);

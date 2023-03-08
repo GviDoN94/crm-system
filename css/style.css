@@ -262,6 +262,16 @@ html {
     transform: translateY(-45%) rotate(0);
 }
 
+.loading {
+    text-align: center;
+    background-color: var(--white);
+    height: 300px;
+}
+
+.spinner {
+  animation: load 2s linear infinite;
+}
+
 .client {
     border-bottom: 1px solid rgba(200, 197, 209, 0.5);
     background-color: var(--white);
