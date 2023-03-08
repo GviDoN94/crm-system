@@ -42,31 +42,33 @@
             <div class="container">
                 <h1 class="visually-hidden">SRM SKB</h1>
                 <h2 class="title">Клиенты</h2>
-                <table class="table">
-                    <thead class="table__head">
-                        <tr class="table__head-row">
-                            <th class="table__head-cell table__id">
-                                <span class="table__head-text table__head-text--up-arrow" data-column-name="id">ID</span>
-                            </th>
-                            <th class="table__head-cell table__name">
-                                <span class="table__head-text" data-column-name="fullName">Фамилия Имя Отчество</span>
-                            </th>
-                            <th class="table__head-cell table__creation-date">
-                                <span class="table__head-text" data-column-name="createdAt">Дата и&nbsp;время создания</span>
-                            </th>
-                            <th class="table__head-cell table__last-change">
-                                <span class="table__head-text" data-column-name="updatedAt">Последние изменения</span>
-                            </th>
-                            <th class="table__head-cell table__contacts">
-                                <span class="table__head-text">Контакты</span>
-                            </th>
-                            <th class="table__head-cell table__actions">
-                                <span class="table__head-text">Действия</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="table__body"></tbody>
-                </table>
+                <div class="table-wrap">
+                  <table class="table">
+                      <thead class="table__head">
+                          <tr class="table__head-row">
+                              <th class="table__head-cell table__id">
+                                  <span class="table__head-text table__head-text--up-arrow" data-column-name="id">ID</span>
+                              </th>
+                              <th class="table__head-cell table__name">
+                                  <span class="table__head-text" data-column-name="fullName">Фамилия Имя Отчество</span>
+                              </th>
+                              <th class="table__head-cell table__creation-date">
+                                  <span class="table__head-text" data-column-name="createdAt">Дата и&nbsp;время создания</span>
+                              </th>
+                              <th class="table__head-cell table__last-change">
+                                  <span class="table__head-text" data-column-name="updatedAt">Последние изменения</span>
+                              </th>
+                              <th class="table__head-cell table__contacts">
+                                  <span class="table__head-text">Контакты</span>
+                              </th>
+                              <th class="table__head-cell table__actions">
+                                  <span class="table__head-text">Действия</span>
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody class="table__body"></tbody>
+                  </table>
+                </div>
                 <button class="btn-reset add-client-btn" data-path="add-client" aria-label="Закрыть модальное окно">
                     <svg class="add-client-btn__svg" width="23" height="16" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M14.5 8C16.71 8 18.5 6.21 18.5 4C18.5 1.79 16.71 0 14.5 0C12.29 0 10.5 1.79 10.5 4C10.5 6.21 12.29 8 14.5 8ZM5.5 6V3H3.5V6H0.5V8H3.5V11H5.5V8H8.5V6H5.5ZM14.5 10C11.83 10 6.5 11.34 6.5 14V16H22.5V14C22.5 11.34 17.17 10 14.5 10Z"/>

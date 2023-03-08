@@ -51,3 +51,35 @@
       width: 130px;
     }
 }
+
+@media (max-width: 1023px) {
+    .table__creation-date,
+    .table__last-change {
+        width: 98px;
+    }
+}
+
+@media (max-width: 960px) {
+    .table__actions {
+        width: 105px;
+  }
+
+    .client__actions {
+        width: auto;
+    }
+
+    .client__change-btn {
+      margin: 0;
+      margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 855px) {
+    .table-wrap {
+      overflow-x: scroll;
+    }
+
+    .table {
+      width: 800px;
+    }
+}
