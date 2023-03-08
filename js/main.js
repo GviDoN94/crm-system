@@ -87,67 +87,89 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function renderContacts(arr, parent) {
-    arr.forEach(contact => {
-      let contactType = null,
-          contactTypeLink = '',
-          targetBlank = '_blank';
+  function renderContact(contact, parent) {
+    let contactType = null,
+    contactTypeLink = '',
+    targetBlank = '_blank';
 
-      switch (contact.type) {
-        case 'Телефон':
-          contactType = 'client__contact-link--phone';
-          contactTypeLink = 'tel:';
-          targetBlank = '';
-          break;
-        case 'Email':
-          contactType = 'client__contact-link--mail';
-          contactTypeLink = 'mailto:';
-          targetBlank = ' ';
-          break;
-        case 'Vk':
-          contactType = 'client__contact-link--vk';
-          break;
-        case 'Facebook':
-          contactType = 'client__contact-link--fb';
-          break;
-        case 'Другое':
-          contactType = 'client__contact-link--other';
-          break;
+    switch (contact.type) {
+      case 'Телефон':
+        contactType = 'client__contact-link--phone';
+        contactTypeLink = 'tel:';
+        targetBlank = '';
+        break;
+      case 'Email':
+        contactType = 'client__contact-link--mail';
+        contactTypeLink = 'mailto:';
+        targetBlank = ' ';
+        break;
+      case 'Vk':
+        contactType = 'client__contact-link--vk';
+        break;
+      case 'Facebook':
+        contactType = 'client__contact-link--fb';
+        break;
+      case 'Другое':
+        contactType = 'client__contact-link--other';
+        break;
 
-        default:
-          break;
-      }
+      default:
+        break;
+    }
 
-      const contactEl = createElement('li', parent, '', ['client__contact']),
-            contactLink = createElement(
-              'a',
-              contactEl,
-              '',
-              ['link', 'client__contact-link', contactType]
-            ),
-            contactTooltipLink = `${contactTypeLink}${contact.value}`;
+    const contactEl = createElement('li', parent, '', ['client__contact']),
+          contactLink = createElement(
+            'a',
+            contactEl,
+            '',
+            ['link', 'client__contact-link', contactType]
+          ),
+          contactTooltipLink = `${contactTypeLink}${contact.value}`;
 
-      contactLink.href = contactTooltipLink;
-      contactLink.ariaLabel = `Тип контакта: ${contact.type}`;
+    contactLink.href = contactTooltipLink;
+    contactLink.ariaLabel = `Тип контакта: ${contact.type}`;
 
-      if (targetBlank) {
-        contactLink.target = targetBlank;
-        contactLink.rel = 'nofollow noopener noreferrer';
-      }
+    if (targetBlank) {
+      contactLink.target = targetBlank;
+      contactLink.rel = 'nofollow noopener noreferrer';
+    }
 
-      tippy(contactLink, {
-        content:
-          `<span class='tooltip__type-text'>${contact.type}:</span>
-          <a class='link tooltip__link'
-            href='${contactTooltipLink}'
-            target='${targetBlank}'
-            rel='nofollow noopener noreferrer'>${contact.value}</a>`,
-        allowHTML: true,
-        theme: 'mine-shaft',
-        interactive: true,
-      });
+    tippy(contactLink, {
+      content:
+        `<span class='tooltip__type-text'>${contact.type}:</span>
+        <a class='link tooltip__link'
+          href='${contactTooltipLink}'
+          target='${targetBlank}'
+          rel='nofollow noopener noreferrer'>${contact.value}</a>`,
+      allowHTML: true,
+      theme: 'mine-shaft',
+      interactive: true,
     });
   }
+
+  function renderContacts(arr, parent) {
+    const showMoreBtn = parent.querySelector('.client__contact');
+    if (arr.length > 4 && !showMoreBtn) {
+      for (let i = 0; i < 4; i++) {
+        renderContact(arr[i], parent);
+      }
+
+      const liEl = createElement('li', parent, '', ['client__contact']),
+            showMoreBtn = createElement(
+        'button',
+        liEl,
+        `+${arr.length - 4}`,
+        ['btn-reset', 'more-contacts-btn']
+      );
+
+      showMoreBtn.addEventListener('click', () => renderContacts(arr, parent));
+    } else {
+      parent.innerHTML = '';
+      arr.forEach((contact, i) => {
+        renderContact(contact, parent);
+      });
+    }
+}
 
   function renderTable(serchRequest = '') {
     const uri = serchRequest ?

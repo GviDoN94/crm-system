@@ -359,15 +359,15 @@ html {
 }
 
 .client__contacts-list {
+    display: flex;
+    flex-wrap: wrap;
     padding: 0;
-    width: 117px;
+    width: 108px;
     list-style: none;
 }
 
 .client__contact {
-    display: inline-block;
     margin-right: 7px;
-
 }
 
 .client__contact:nth-child(5n) {
@@ -407,6 +407,17 @@ html {
 
 .client__contact-link--other {
     background-image: url(../img/other-icon.svg);
+}
+
+.more-contacts-btn {
+  display: inline-block;
+  border: 1px solid var(--purpule);
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  color: var(--mine-shaft);
+  font-weight: 600;
+  font-size: 8px;
 }
 
 .client__creation-time,
