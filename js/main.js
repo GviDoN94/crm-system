@@ -229,6 +229,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (form.dataset.target !== 'delete-client') {
       form.reset();
+      form.classList.remove('blocked');
       clientId.innerHTML = '';
       contactsContainerForm.innerHTML = '';
       contactsContainerForm.classList.remove(
@@ -249,11 +250,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function fillForm() {
     const {
+      form,
       clientId,
       inputsForm,
       contactsContainerForm,
-      errorsForm
+      errorsForm,
+      acceptFormBtn
     } = currentModalFormElements;
+
+    form.classList.add('blocked');
+    acceptFormBtn.classList.add('accept-btn--load');
 
     getData(`${prefixUri}/${currentClientId}`)
       .then(data => {
@@ -273,6 +279,7 @@ window.addEventListener('DOMContentLoaded', () => {
             contact.value
           );
         });
+        form.classList.remove('blocked');
       })
       .catch(() => {
         createElement('span', errorsForm, 'Клиент удален или ошибка сервера');
@@ -280,7 +287,8 @@ window.addEventListener('DOMContentLoaded', () => {
           closeModal();
           renderTable();
         }, 3000);
-      });
+      })
+      .finally(() => acceptFormBtn.classList.remove('accept-btn--load'));
   }
 
   function openModal(path) {
@@ -474,6 +482,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function processForm(hendler, uri) {
     const {
+      form,
       contactsContainerForm,
       errorsForm,
       inputsForm,
@@ -481,6 +490,8 @@ window.addEventListener('DOMContentLoaded', () => {
     } = currentModalFormElements,
       contactsForm = contactsContainerForm.querySelectorAll('.contact'),
       clientObj = {};
+
+    form.classList.add('blocked');
 
     inputsForm.forEach(input => {
       let value = input.value.trim() ?
@@ -520,6 +531,7 @@ window.addEventListener('DOMContentLoaded', () => {
         createElement('span', errorsForm, 'Что-то пошло не так')
       )
       .finally(() => {
+        form.classList.remove('blocked');
         acceptFormBtn.classList.remove('accept-btn--load');
         acceptFormBtn.disabled = false;
       });
