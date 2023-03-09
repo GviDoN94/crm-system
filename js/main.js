@@ -219,7 +219,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const trLoading = createElement('tr', tBody);
     trLoading.innerHTML =`
       <td class="loading" colspan='6'>
-        <svg class="spinner" width="80" height="80" viewBox="0 0 80 80" fill="none"
+        <svg class="spinner" width="80" height="80" viewBox="0 0 80 80"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path d="M4.00025 40.0005C4.00025 59.8825 20.1182 76.0005 40.0002
             76.0005C59.8822 76.0005 76.0002 59.8825 76.0002 40.0005C76.0002
@@ -259,7 +260,7 @@ window.addEventListener('DOMContentLoaded', () => {
       {
         form: form,
         clientId: form.querySelector('.modal-form__client-id'),
-        inputsForm: form.querySelectorAll('.modal-form__input'),
+        formInputs: form.querySelectorAll('.modal-form__input'),
         addContactsForm: form.querySelector('.modal-form__add-contacts'),
         contactsContainerForm: form.querySelector(
           '.modal-form__contacts-container'
@@ -283,7 +284,7 @@ window.addEventListener('DOMContentLoaded', () => {
       addContactsForm,
       addContactBtn,
       errorsForm,
-      inputsForm
+      formInputs
     } = currentModalFormElements;
 
     window.location.href = window.location.href.split('#')[0];
@@ -301,7 +302,7 @@ window.addEventListener('DOMContentLoaded', () => {
         'modal-form__add-contacts--large-padding'
       );
       addContactBtn.classList.remove('hide');
-      inputsForm.forEach(input => {
+      formInputs.forEach(input => {
         input.classList.remove('modal-form__input--error');
         input.nextElementSibling.classList.remove(
           'modal-form__placeholder--small'
@@ -314,7 +315,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const {
       form,
       clientId,
-      inputsForm,
+      formInputs,
       contactsContainerForm,
       errorsForm,
       acceptFormBtn
@@ -328,7 +329,7 @@ window.addEventListener('DOMContentLoaded', () => {
         window.location.hash = data.id;
         clientId.textContent = `ID: ${data.id}`;
 
-        inputsForm.forEach(input => {
+        formInputs.forEach(input => {
           input.nextElementSibling.classList.add(
             'modal-form__placeholder--small'
           );
@@ -408,6 +409,7 @@ window.addEventListener('DOMContentLoaded', () => {
         class="contact__input"
         type="text"
         value="${value}"
+        name="contact"
         placeholder="Введите данные контакта"
       >
       <button class="btn-reset contact__delete-btn"
@@ -482,6 +484,12 @@ window.addEventListener('DOMContentLoaded', () => {
       .querySelector('.contact__delete-btn')
       .addEventListener('click', () => {
         contact.classList.remove('animate-add');
+        currentModalFormElements.errorsForm.querySelectorAll('span')
+        .forEach(error => {
+          if(error.textContent.includes('контакты')) {
+            error.remove();
+          }
+        });
         setTimeout(() => {
           contact.remove();
           amountImputs = parent.querySelectorAll('.contact').length;
@@ -504,12 +512,67 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function removeFormError(error, element = null) {
+    if (error) {
+      error.remove();
+    }
+    if (element) {
+      element.classList.remove('modal-form__input--error');
+    }
+  }
+
+  function checkForm(inputs, contactscontainer, errorsContainer) {
+    const contactInputs = contactscontainer.querySelectorAll('.contact__input');
+    let wrong = false;
+
+    inputs.forEach(input => {
+      if (input.dataset.name && !input.value.trim()) {
+        input.classList.add('modal-form__input--error');
+        const error = createElement(
+          'span',
+          errorsContainer,
+          `Поле "${input.dataset.name}" не заполнено или содержит пробелы`
+        );
+        input.addEventListener('input', () =>
+          removeFormError(error, input),
+          true
+        );
+        wrong = true;
+      }
+    });
+
+    if (contactInputs.length) {
+      contactInputs.forEach(contact => {
+        if (!contact.value.trim()) {
+          const errors = errorsContainer.querySelectorAll('span');
+          let error = null;
+          errors.forEach(errorEl =>
+            error = errorEl.textContent.includes('контакты') ? errorEl : null
+          );
+
+          error = error ?
+                  error :
+                  createElement(
+                    'span',
+                    errorsContainer,
+                    'Не все добавленные контакты заполнены или содержат пробелы'
+                  );
+
+          contact.addEventListener('input', () => removeFormError(error), true);
+          wrong = true;
+        }
+      });
+    }
+
+    return wrong;
+  }
+
   function processForm(hendler, uri) {
     const {
       form,
       contactsContainerForm,
       errorsForm,
-      inputsForm,
+      formInputs,
       acceptFormBtn
     } = currentModalFormElements,
       contactsForm = contactsContainerForm.querySelectorAll('.contact'),
@@ -517,7 +580,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     form.classList.add('blocked');
 
-    inputsForm.forEach(input => {
+    formInputs.forEach(input => {
       let value = input.value.trim() ?
         addCapitalLetter(input.value).trim() :
         input.value;
@@ -540,7 +603,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (data.errors) {
           data.errors.forEach(error => {
             createElement('span', errorsForm, error.message);
-            inputsForm.forEach(input => {
+            formInputs.forEach(input => {
               if (input.name === error.field) {
                 input.classList.add('modal-form__input--error');
               }
@@ -627,10 +690,22 @@ window.addEventListener('DOMContentLoaded', () => {
     modalForm.addEventListener('submit', e => {
       e.preventDefault();
 
-      const {errorsForm, acceptFormBtn} = currentModalFormElements,
+      const {
+        formInputs,
+        contactsContainerForm,
+        errorsForm,
+        acceptFormBtn
+      } = currentModalFormElements,
             currentForm = modalForm.dataset.target;
 
       errorsForm.innerHTML = '';
+
+      if (currentForm !== 'delete-client') {
+        if (checkForm(formInputs, contactsContainerForm, errorsForm)) {
+          return;
+        }
+      }
+
       acceptFormBtn.classList.add('accept-btn--load');
       acceptFormBtn.disabled = true;
 
