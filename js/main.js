@@ -517,21 +517,35 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function showError(input, errorsContainer, message) {
+    input.classList.add('modal-form__input--error');
+        const error = createElement('span', errorsContainer, message);
+        input.addEventListener('input', () =>
+          removeFormError(error, input),
+          true
+        );
+  }
+
   function checkForm(inputs, contactscontainer, errorsContainer) {
     const contactInputs = contactscontainer.querySelectorAll('.contact__input');
     let wrong = false;
 
     inputs.forEach(input => {
-      if (input.dataset.name && !input.value.trim()) {
+      if (input.dataset.name !== 'Отчество' && !input.value.trim()) {
         input.classList.add('modal-form__input--error');
-        const error = createElement(
-          'span',
+        showError(
+          input,
           errorsContainer,
           `Поле "${input.dataset.name}" не заполнено или содержит пробелы`
         );
-        input.addEventListener('input', () =>
-          removeFormError(error, input),
-          true
+        wrong = true;
+      }
+
+      if (input.value && !input.value.trim().match(/^[а-яА-Яa-zA-Z\s-]+$/)) {
+        showError(
+          input,
+          errorsContainer,
+          `Поле "${input.dataset.name}" содержит недопустимые символы`
         );
         wrong = true;
       }
@@ -611,7 +625,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       })
       .catch(() =>
-        createElement('span', errorsForm, 'Что-то пошло не так')
+        createElement('span', errorsForm, 'Ошибка сервера')
       )
       .finally(() => {
         form.classList.remove('blocked');
