@@ -459,6 +459,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     contactSelect.addEventListener('change', e => {
+      contactInput.value = '';
       if (contactInput.inputmask) {
         contactInput.inputmask.remove();
       }
@@ -572,7 +573,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (contactInputs.length) {
       contactInputs.forEach(contact => {
-        if (contact.inputmask.unmaskedvalue().length < 10) {
+        if (!contact.value.trim() ||
+            (contact.inputmask &&
+              contact.inputmask.unmaskedvalue().length < 10)) {
           contact.classList.add('contact__input--error');
 
           const errors = errorsContainer.querySelectorAll('span');
