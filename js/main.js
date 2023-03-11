@@ -374,7 +374,7 @@ window.addEventListener('DOMContentLoaded', () => {
     formReset();
   }
 
-  function createContactInput (parent, type= '', value='') {
+  function createContactInput (parent, selectedType = 'Телефон', value='') {
     const options = [
       {
         value: 'Телефон',
@@ -397,27 +397,35 @@ window.addEventListener('DOMContentLoaded', () => {
         label: 'Другое',
       }
     ],
-    contact = createElement('div', parent, '', ['contact']);
+    contact = createElement('div', parent, '', ['contact']),
+    contactSelect = createElement('select', contact, '', ['contact__select']),
+    contactInput = createElement('input', contact, '', ['contact__input']),
+    contactDeleteBtn = createElement(
+      'button',
+      contact,
+      '',
+      ['btn-reset', 'contact__delete-btn']
+    ),
+    phoneMask = new Inputmask('+7 (999) 999-99-99');
 
-    contact.innerHTML =`
-      <select class="contact__select"></select>
-      <input
-        class="contact__input"
-        type="text"
-        value="${value}"
-        name="contact"
-        placeholder="Введите данные контакта"
-      >
-      <button class="btn-reset contact__delete-btn"
-        type="button"
-        aria-label="Удалить контакт"
-      >
-        <svg
-          class="contact__svg-delete"
-          width="12" height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
+    options.forEach(option => {
+      if (option.value === selectedType) {
+        option.selected = true;
+      }
+    });
+
+    contactInput.value = value;
+    contactInput.name = 'contact';
+    contactInput.placeholder = 'Введите данные контакта';
+    contactDeleteBtn.type = 'button';
+    contactDeleteBtn.ariaLabel = 'Удалить контакт';
+    contactDeleteBtn.innerHTML = `
+      <svg
+        class="contact__svg-delete"
+        width="12" height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
           <path
             d="M6 0C2.682 0 0 2.682 0 6C0 9.318 2.682 12 6
             12C9.318 12 12 9.318 12 6C12 2.682 9.318 0 6 0ZM6
@@ -427,30 +435,43 @@ window.addEventListener('DOMContentLoaded', () => {
             3.846L5.154 6L3 8.154L3.846 9L6 6.846L8.154 9L9
             8.154L6.846 6L9 3.846L8.154 3Z"
           />
-        </svg>
-      </button>
+      </svg>
     `;
 
-    tippy(contact.querySelector('.contact__delete-btn'), {
-      content: 'Удалить контакт',
-      theme: 'mine-shaft',
-      offset: [0, -1]
-    });
-
-    if (type) {
-      options.forEach(option => {
-        if (option.value === type) {
-          option.selected = true;
-        }
-      });
+    switch (selectedType) {
+      case 'Телефон':
+        contactInput.type = 'tel:';
+        phoneMask.mask(contactInput);
+        break;
+      case 'Email':
+        contactInput.type = 'email';
+        break;
+      default:
+        contactInput.type = 'url';
     }
 
-    new Choices(contact.querySelector('.contact__select'), {
+    new Choices(contactSelect, {
       itemSelectText: '',
       searchEnabled: false,
       position: 'bottom',
       shouldSort: false,
       choices: options
+    });
+
+    contactSelect.addEventListener('change', e => {
+      if (contactInput.inputmask) {
+        contactInput.inputmask.remove();
+      }
+
+      if (e.detail.value === 'Телефон') {
+        phoneMask.mask(contactInput);
+      }
+    });
+
+    tippy(contactDeleteBtn, {
+      content: 'Удалить контакт',
+      theme: 'mine-shaft',
+      offset: [0, -1]
     });
 
     setTimeout(() => contact.classList.add('animate-add'), 10);
@@ -476,35 +497,33 @@ window.addEventListener('DOMContentLoaded', () => {
       parent.classList.remove('modal-form__contacts-container--margin-bottom');
     }
 
-    contact
-      .querySelector('.contact__delete-btn')
-      .addEventListener('click', () => {
-        contact.classList.remove('animate-add');
-        currentModalFormElements.errorsForm.querySelectorAll('span')
+    contactDeleteBtn.addEventListener('click', () => {
+      contact.classList.remove('animate-add');
+      currentModalFormElements.errorsForm.querySelectorAll('span')
         .forEach(error => {
           if(error.textContent.includes('контакты')) {
             error.remove();
           }
         });
-        setTimeout(() => {
-          contact.remove();
-          amountImputs = parent.querySelectorAll('.contact').length;
-          if (!amountImputs) {
-            addContactsForm.classList.remove(
-              'modal-form__add-contacts--large-padding'
-            );
-            parent.classList.remove(
-              'modal-form__contacts-container--margin-bottom'
-            );
-          }
-          if (amountImputs < 10 &&
-            addContactBtn.classList.contains('hide')) {
-            addContactBtn.classList.remove('hide');
-            parent.classList.add(
-              'modal-form__contacts-container--margin-bottom'
-            );
-          }
-        }, 350);
+      setTimeout(() => {
+        contact.remove();
+        amountImputs = parent.querySelectorAll('.contact').length;
+        if (!amountImputs) {
+          addContactsForm.classList.remove(
+            'modal-form__add-contacts--large-padding'
+          );
+          parent.classList.remove(
+            'modal-form__contacts-container--margin-bottom'
+          );
+        }
+        if (amountImputs < 10 &&
+          addContactBtn.classList.contains('hide')) {
+          addContactBtn.classList.remove('hide');
+          parent.classList.add(
+            'modal-form__contacts-container--margin-bottom'
+          );
+        }
+      }, 350);
     });
   }
 
@@ -553,9 +572,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (contactInputs.length) {
       contactInputs.forEach(contact => {
-        if (!contact.value.trim()) {
+        if (contact.inputmask.unmaskedvalue().length < 10) {
+          contact.classList.add('contact__input--error');
+
           const errors = errorsContainer.querySelectorAll('span');
           let error = null;
+
           errors.forEach(errorEl =>
             error = errorEl.textContent.includes('контакты') ? errorEl : null
           );
@@ -565,10 +587,13 @@ window.addEventListener('DOMContentLoaded', () => {
                   createElement(
                     'span',
                     errorsContainer,
-                    'Не все добавленные контакты заполнены или содержат пробелы'
+                    'Не все добавленные контакты польностью заполнены'
                   );
 
-          contact.addEventListener('input', () => removeFormError(error), true);
+          contact.addEventListener('input', () => {
+            contact.classList.remove('contact__input--error');
+            removeFormError(error);
+          }, true);
           wrong = true;
         }
       });
@@ -603,7 +628,9 @@ window.addEventListener('DOMContentLoaded', () => {
         inputEl = item.querySelector('.contact__input'),
         contactObj = {
           type: selectEl.value,
-          value: inputEl.value
+          value: inputEl.inputmask ?
+            `+7${inputEl.inputmask.unmaskedvalue()}` :
+            inputEl.value
         };
       clientObj.contacts.push(contactObj);
     });
@@ -652,7 +679,7 @@ window.addEventListener('DOMContentLoaded', () => {
       currentClientId = window.location.hash.slice(1),
       searchTimer = null;
 
-  modal.addEventListener('click', e => {
+  modal.addEventListener('mousedown', e => {
     const event = e.target;
 
     if (event === modal ||

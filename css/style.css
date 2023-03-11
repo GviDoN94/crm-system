@@ -843,10 +843,16 @@ html {
     line-height: 19px;
 }
 
+
 .contact__input::placeholder {
-    color: var(--silver-chalice);
-    font-size: 14px;
-    line-height: 19px;
+  color: var(--silver-chalice);
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.contact__input--error,
+.contact__input--error::placeholder {
+  color: var(--red);
 }
 
 .contact__delete-btn {
