@@ -409,15 +409,18 @@ html {
     background-image: url(../img/other-icon.svg);
 }
 
-.more-contacts-btn {
-  display: inline-block;
+.show-more-contacts {
+  text-align: center;
+  vertical-align: middle;
   border: 1px solid var(--purpule);
   border-radius: 50%;
   width: 16px;
   height: 16px;
   color: var(--mine-shaft);
   font-weight: 600;
+  line-height: 14px;
   font-size: 8px;
+  cursor: pointer;
 }
 
 .client__creation-time,

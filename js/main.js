@@ -112,9 +112,6 @@ window.addEventListener('DOMContentLoaded', () => {
       case 'Другое':
         contactType = 'client__contact-link--other';
         break;
-
-      default:
-        break;
     }
 
     const contactEl = createElement('li', parent, '', ['client__contact']),
@@ -148,26 +145,25 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderContacts(arr, parent) {
-    const showMoreBtn = parent.querySelector('.client__contact');
-    if (arr.length > 4 && !showMoreBtn) {
+    const showMoreContacts = parent.querySelector('.show-more-contacts');
+    if (arr.length > 4 && !showMoreContacts) {
       for (let i = 0; i < 4; i++) {
         renderContact(arr[i], parent);
       }
 
-      const liEl = createElement('li', parent, '', ['client__contact']),
-            showMoreBtn = createElement(
-        'button',
-        liEl,
+      const showMoreContacts = createElement(
+        'li',
+        parent,
         `+${arr.length - 4}`,
-        ['btn-reset', 'more-contacts-btn']
+        ['client__contact', 'show-more-contacts']
       );
 
-      showMoreBtn.addEventListener('click', () => renderContacts(arr, parent));
+      showMoreContacts.addEventListener('click', () =>
+        renderContacts(arr, parent)
+      );
     } else {
       parent.innerHTML = '';
-      arr.forEach((contact, i) => {
-        renderContact(contact, parent);
-      });
+      arr.forEach(contact => renderContact(contact, parent));
     }
   }
 
@@ -709,35 +705,35 @@ window.addEventListener('DOMContentLoaded', () => {
       acceptFormBtn.classList.add('accept-btn--load');
       acceptFormBtn.disabled = true;
 
-      if (currentForm ==='add-client') {
-        processForm(postData, prefixUri);
-      }
-
-      if (currentForm === 'change-client') {
-        processForm(changeData, `${prefixUri}/${currentClientId}`);
-      }
-
-      if (currentForm === 'delete-client') {
-        deleteData(`${prefixUri}/${currentClientId}`)
-          .then(() => {
-            closeModal();
-            renderTable();
-          })
-          .catch(() =>{
-            createElement(
-              'span',
-              errorsForm,
-              'Клиент удален или ошибка сервера'
-            );
-            setTimeout(() => {
+      switch(currentForm) {
+        case 'add-client':
+          processForm(postData, prefixUri);
+          break;
+        case 'change-client':
+          processForm(changeData, `${prefixUri}/${currentClientId}`);
+          break;
+        case 'delete-client':
+          deleteData(`${prefixUri}/${currentClientId}`)
+            .then(() => {
               closeModal();
               renderTable();
-            }, 3000);
-          })
-          .finally(() => {
-            acceptFormBtn.classList.remove('accept-btn--load');
-            acceptFormBtn.disabled = false;
-          });
+            })
+            .catch(() =>{
+              createElement(
+                'span',
+                errorsForm,
+                'Клиент удален или ошибка сервера'
+              );
+              setTimeout(() => {
+                closeModal();
+                renderTable();
+              }, 3000);
+            })
+            .finally(() => {
+              acceptFormBtn.classList.remove('accept-btn--load');
+              acceptFormBtn.disabled = false;
+            });
+          break;
       }
     })
   );
