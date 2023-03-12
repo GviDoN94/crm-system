@@ -326,10 +326,12 @@ window.addEventListener('DOMContentLoaded', () => {
         clientId.textContent = `ID: ${data.id}`;
 
         formInputs.forEach(input => {
-          input.nextElementSibling.classList.add(
-            'modal-form__placeholder--small'
-          );
           input.value = data[input.name];
+          if (input.value) {
+            input.nextElementSibling.classList.add(
+              'modal-form__placeholder--small'
+            );
+          }
         });
 
         data.contacts.forEach(contact => {
@@ -586,7 +588,7 @@ window.addEventListener('DOMContentLoaded', () => {
       contactInputs.forEach(input => {
         if ((input.type === 'tel' &&
             input.inputmask.unmaskedvalue().length < 10) ||
-            (input.type ==='text' && input.value.match(/_/)) ||
+            (input.type ==='text' && input.value.match(/@.*_/)) ||
             !input.value) {
           input.classList.add('contact__input--error');
 
